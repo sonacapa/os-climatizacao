@@ -4,7 +4,6 @@ import { supabase } from '@/lib/supabase';
 
 const EMPTY = { company: null, profiles: [], clients: [], equipment: [], catalog: [], orders: [] };
 
-// Carrega tudo o que o usuário pode ver (a segurança por perfil é feita pelo banco, via RLS)
 export function useAppData(enabled) {
   const [data, setData] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
@@ -20,7 +19,7 @@ export function useAppData(enabled) {
       supabase.from('catalog_items').select('*').order('name'),
       supabase
         .from('work_orders')
-        .select('*, checklist_items(*), materials_used(*)')
+        .select('*, work_order_items(*), checklist_items(*), materials_used(*)')
         .order('scheduled_date', { ascending: false })
         .order('scheduled_time', { ascending: false })
     ]);
@@ -32,10 +31,17 @@ export function useAppData(enabled) {
       clients: clients.data || [],
       equipment: equipment.data || [],
       catalog: catalog.data || [],
-      orders: (orders.data || []).map((o) => ({
-        ...o,
-        checklist_items: [...(o.checklist_items || [])].sort((a, b) => a.position - b.position)
-      }))
+      orders: (orders.data || []).map((o) => {
+        const items = [...(o.work_order_items || [])]
+          .sort((a, b) => a.position - b.position || a.created_at.localeCompare(b.created_at))
+          .map((it) => ({
+            ...it,
+            checklist: (o.checklist_items || []).filter((c) => c.item_id === it.id).sort((a, b) => a.position - b.position),
+            materials: (o.materials_used || []).filter((m) => m.item_id === it.id)
+          }));
+        const { work_order_items, checklist_items, materials_used, ...rest } = o;
+        return { ...rest, items };
+      })
     });
     setLoading(false);
   }, []);
@@ -43,16 +49,20 @@ export function useAppData(enabled) {
   useEffect(() => {
     if (!enabled) return undefined;
     reload();
-    // "Ao vivo": quando qualquer O.S. muda, recarrega (com pequeno atraso para juntar mudanças)
+    const bump = () => {
+      clearTimeout(timer.current);
+      timer.current = setTimeout(reload, 500);
+    };
     const channel = supabase
       .channel('os-live')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'work_orders' }, () => {
-        clearTimeout(timer.current);
-        timer.current = setTimeout(reload, 400);
-      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'work_orders' }, bump)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'work_order_items' }, bump)
       .subscribe();
+    const onVisible = () => document.visibilityState === 'visible' && reload();
+    document.addEventListener('visibilitychange', onVisible);
     return () => {
       clearTimeout(timer.current);
+      document.removeEventListener('visibilitychange', onVisible);
       supabase.removeChannel(channel);
     };
   }, [enabled, reload]);

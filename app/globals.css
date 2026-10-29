@@ -2,13 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; }
-body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: #f1f5f9; color: #0f172a; }
+html { -webkit-text-size-adjust: 100%; }
+body { @apply bg-slate-50 text-slate-900 antialiased; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+input, select, textarea { font-size: 16px; } /* evita zoom automático no iPhone */
+@media (min-width: 768px) { input, select, textarea { font-size: 14px; } }
+:focus-visible { outline: 2px solid #0284c7; outline-offset: 2px; }
+.safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
 
-/* Impressão: só o conteúdo marcado com .print-area (laudo ou etiqueta QR) */
+@keyframes sheet-in { from { transform: translateY(24px); opacity: 0 } to { transform: none; opacity: 1 } }
+.sheet-in { animation: sheet-in .18s ease-out; }
+@media (prefers-reduced-motion: reduce) { .sheet-in { animation: none; } }
+
 @media print {
   body * { visibility: hidden; }
   .print-area, .print-area * { visibility: visible; }
-  .print-area { position: absolute; left: 0; top: 0; width: 100%; max-height: none !important; overflow: visible !important; box-shadow: none !important; }
+  .print-area { position: absolute !important; left: 0; top: 0; width: 100%; max-height: none !important; overflow: visible !important; box-shadow: none !important; border-radius: 0 !important; }
   .no-print { display: none !important; }
+  @page { margin: 12mm; }
 }

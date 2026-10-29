@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import { Wind } from 'lucide-react';
-import { fmtDate, isWarrantyActive, waLink } from '@/lib/utils';
+import { fmtDate, isWarrantyActive, logoUrl, waLink } from '@/lib/utils';
 
 // Página pública aberta ao ler o QR Code. Nunca guarda cache: o histórico precisa estar sempre atualizado.
 export const dynamic = 'force-dynamic';
@@ -29,7 +29,12 @@ export default async function PublicEquipmentPage({ params }) {
   return (
     <main className="min-h-screen bg-slate-100">
       <header className="bg-slate-900 text-white px-5 py-4 flex items-center gap-3">
-        <div className="bg-sky-500 p-2 rounded-xl"><Wind className="w-5 h-5" /></div>
+        {company.logo_path ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logoUrl(company.logo_path)} alt="" className="w-10 h-10 object-contain rounded-lg bg-white" />
+        ) : (
+          <div className="bg-sky-500 p-2 rounded-xl"><Wind className="w-5 h-5" /></div>
+        )}
         <div>
           <p className="text-sm font-bold leading-tight">{company.name}</p>
           <p className="text-xs text-slate-400">Histórico do equipamento</p>
@@ -75,6 +80,7 @@ export default async function PublicEquipmentPage({ params }) {
               {history.map((h, i) => (
                 <li key={i} className="space-y-1.5">
                   <p className="text-sm font-semibold text-slate-900">{fmtDate(h.date)} · {h.service}</p>
+                  {h.warranty_days > 0 && <p className="text-xs text-slate-500">Garantia de {h.warranty_days} dias</p>}
                   {h.materials.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
                       {h.materials.map((m, j) => (
