@@ -7,7 +7,7 @@ import { Btn, Field, Logo, inputCls } from './ui';
 
 function Shell({ company, title, subtitle, children }) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-brand-50 to-slate-100 flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center text-center mb-6">
           <Logo company={company} size="lg" />
@@ -65,7 +65,7 @@ export default function Login() {
   if (mode === 'sent') {
     return (
       <Shell company={company} title="Verifique seu e-mail" subtitle={`Enviamos um link para ${email}. Abra-o neste aparelho para criar uma nova senha.`}>
-        <div className="flex items-center gap-3 bg-sky-50 text-sky-800 rounded-xl p-3 text-sm">
+        <div className="flex items-center gap-3 bg-brand-50 text-brand-800 rounded-xl p-3 text-sm">
           <MailCheck className="w-5 h-5 shrink-0" /> Não chegou? Veja a caixa de spam ou peça ao administrador para definir uma senha nova.
         </div>
         <Btn variant="secondary" className="w-full" onClick={() => setMode('signin')}>Voltar para o login</Btn>
@@ -106,7 +106,7 @@ export default function Login() {
         </Field>
         {error && <p role="alert" className="text-sm text-rose-700 bg-rose-50 rounded-lg px-3 py-2">{error}</p>}
         <Btn type="submit" loading={busy} className="w-full" size="lg">Entrar</Btn>
-        <button type="button" onClick={() => { setMode('forgot'); setError(''); }} className="block text-sm text-sky-700 font-medium mx-auto">
+        <button type="button" onClick={() => { setMode('forgot'); setError(''); }} className="block text-sm text-brand-700 font-medium mx-auto">
           Esqueci minha senha
         </button>
       </form>

@@ -37,41 +37,43 @@ export function ClientPicker({ value, onChange, onCreate }) {
 
   if (selected) {
     return (
-      <div className="flex items-center justify-between gap-3 bg-sky-50 border border-sky-200 rounded-xl px-3.5 py-2.5">
+      <div className="flex items-center justify-between gap-3 bg-brand-50 border border-brand-200 rounded-xl px-3.5 py-2.5">
         <div className="min-w-0">
           <p className="font-semibold text-slate-900 truncate">{selected.name}</p>
           <p className="text-xs text-slate-500 truncate">{selected.address || selected.phone || 'Sem endereço'}</p>
         </div>
-        <button type="button" onClick={() => onChange('')} className="text-sky-700 text-sm font-semibold shrink-0">Trocar</button>
+        <button type="button" onClick={() => onChange('')} className="text-brand-700 text-sm font-semibold shrink-0">Trocar</button>
       </div>
     );
   }
 
-  const n = norm(q);
-  const list = data.clients
-    .filter((c) => !n || norm(`${c.name} ${c.phone} ${c.address} ${c.document}`).includes(n))
-    .slice(0, 6);
+  const n = norm(q.trim());
+  const list = n
+    ? data.clients.filter((c) => norm(`${c.name} ${c.phone} ${c.address} ${c.document}`).includes(n)).slice(0, 6)
+    : [];
 
   return (
     <div className="space-y-2">
       <div className="relative">
         <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar cliente por nome, telefone ou endereço" className={`${inputCls} pl-10`} aria-label="Buscar cliente" />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Digite o nome, telefone ou endereço do cliente" className={`${inputCls} pl-10`} aria-label="Buscar cliente" />
       </div>
-      <div className="border border-slate-200 rounded-xl divide-y divide-slate-100 overflow-hidden">
-        {list.map((c) => (
-          <button key={c.id} type="button" onClick={() => onChange(c.id)} className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50">
-            <p className="font-medium text-slate-900 text-sm">{c.name}</p>
-            <p className="text-xs text-slate-500 truncate">{c.address || c.phone || '—'}</p>
-          </button>
-        ))}
-        {list.length === 0 && <p className="px-3.5 py-3 text-sm text-slate-500">Nenhum cliente encontrado.</p>}
-        {onCreate && (
-          <button type="button" onClick={onCreate} className="w-full text-left px-3.5 py-2.5 text-sm font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100">
-            + Cadastrar novo cliente
-          </button>
-        )}
-      </div>
+      {n && (
+        <div className="border border-slate-200 rounded-xl divide-y divide-slate-100 overflow-hidden bg-white">
+          {list.map((c) => (
+            <button key={c.id} type="button" onClick={() => onChange(c.id)} className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50">
+              <p className="font-medium text-slate-900 text-sm">{c.name}</p>
+              <p className="text-xs text-slate-500 truncate">{c.address || c.phone || '—'}</p>
+            </button>
+          ))}
+          {list.length === 0 && <p className="px-3.5 py-3 text-sm text-slate-500">Nenhum cliente encontrado para “{q.trim()}”.</p>}
+        </div>
+      )}
+      {onCreate && (
+        <button type="button" onClick={onCreate} className="text-sm font-semibold text-brand-700 hover:underline">
+          + Cadastrar novo cliente
+        </button>
+      )}
     </div>
   );
 }
@@ -84,10 +86,10 @@ export function CheckRow({ checked, disabled, onChange, children }) {
       onClick={() => onChange(!checked)}
       aria-pressed={checked}
       className={`w-full flex items-center gap-3 text-left rounded-xl border px-3 py-2.5 transition-colors ${
-        checked ? 'border-sky-500 bg-sky-50' : 'border-slate-200 bg-white hover:bg-slate-50'
+        checked ? 'border-brand-500 bg-brand-50' : 'border-slate-200 bg-white hover:bg-slate-50'
       } ${disabled ? 'opacity-70' : ''}`}
     >
-      <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${checked ? 'bg-sky-600 border-sky-600 text-white' : 'border-slate-300 bg-white'}`}>
+      <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 ${checked ? 'bg-brand-600 border-brand-600 text-white' : 'border-slate-300 bg-white'}`}>
         {checked && <Check className="w-3.5 h-3.5" strokeWidth={3} />}
       </span>
       <div className="min-w-0 flex-1">{children}</div>

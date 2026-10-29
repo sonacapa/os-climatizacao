@@ -7,9 +7,9 @@ import { Btn, Card } from '../ui';
 import OsCard from './OsCard';
 
 function Stat({ icon: Icon, tone, value, label, onClick }) {
-  const tones = { sky: 'bg-sky-50 text-sky-700', indigo: 'bg-indigo-50 text-indigo-700', green: 'bg-emerald-50 text-emerald-700', amber: 'bg-amber-50 text-amber-700' };
+  const tones = { sky: 'bg-brand-50 text-brand-700', indigo: 'bg-indigo-50 text-indigo-700', green: 'bg-emerald-50 text-emerald-700', amber: 'bg-amber-50 text-amber-700' };
   return (
-    <button onClick={onClick} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 text-left hover:border-sky-300 transition">
+    <button onClick={onClick} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 text-left hover:border-brand-300 transition">
       <span className={`inline-flex p-2 rounded-xl ${tones[tone]}`}><Icon className="w-5 h-5" /></span>
       <p className="text-3xl font-bold text-slate-900 mt-2">{value}</p>
       <p className="text-sm text-slate-500">{label}</p>
@@ -37,13 +37,13 @@ export default function Dashboard({ go }) {
       </PageHeader>
 
       {fresh && (
-        <Card className="p-5 bg-sky-50 border-sky-200">
+        <Card className="p-5 bg-brand-50 border-brand-200">
           <h2 className="font-bold text-slate-900">Primeiros passos</h2>
           <ol className="mt-2 text-sm text-slate-700 space-y-1 list-decimal pl-5">
-            <li><button className="text-sky-700 font-semibold" onClick={() => go('empresa')}>Preencha os dados da empresa</button> e envie a logomarca.</li>
-            <li><button className="text-sky-700 font-semibold" onClick={() => go('equipe')}>Crie os acessos</button> dos técnicos e do escritório.</li>
-            <li><button className="text-sky-700 font-semibold" onClick={() => go('clientes')}>Cadastre clientes e aparelhos</button> e imprima as etiquetas QR.</li>
-            <li><button className="text-sky-700 font-semibold" onClick={() => openModal('os')}>Abra a primeira O.S.</button> para um técnico.</li>
+            <li><button className="text-brand-700 font-semibold" onClick={() => go('empresa')}>Preencha os dados da empresa</button> e envie a logomarca.</li>
+            <li><button className="text-brand-700 font-semibold" onClick={() => go('equipe')}>Crie os acessos</button> dos técnicos e do escritório.</li>
+            <li><button className="text-brand-700 font-semibold" onClick={() => go('clientes')}>Cadastre clientes e aparelhos</button> e imprima as etiquetas QR.</li>
+            <li><button className="text-brand-700 font-semibold" onClick={() => openModal('os')}>Abra a primeira O.S.</button> para um técnico.</li>
           </ol>
         </Card>
       )}
@@ -59,7 +59,7 @@ export default function Dashboard({ go }) {
         <section className="space-y-2">
           <h2 className="font-bold text-rose-700 flex items-center gap-2"><AlertTriangle className="w-5 h-5" /> Atrasadas ({late.length})</h2>
           <div className="grid gap-2 md:grid-cols-2">{late.slice(0, 4).map((o) => <OsCard key={o.id} os={o} showDate={relDay(o.scheduled_date)} />)}</div>
-          {late.length > 4 && <button onClick={() => go('os', { filter: 'abertas' })} className="text-sm font-semibold text-sky-700">Ver todas</button>}
+          {late.length > 4 && <button onClick={() => go('os', { filter: 'abertas' })} className="text-sm font-semibold text-brand-700">Ver todas</button>}
         </section>
       )}
 
@@ -76,7 +76,7 @@ export default function Dashboard({ go }) {
         <section className="space-y-2">
           <div className="flex items-center justify-between">
             <h2 className="font-bold text-slate-900">Preventivas para avisar</h2>
-            <button onClick={() => go('preventivas')} className="text-sm font-semibold text-sky-700">Ver todas</button>
+            <button onClick={() => go('preventivas')} className="text-sm font-semibold text-brand-700">Ver todas</button>
           </div>
           <Card className="divide-y divide-slate-100">
             {due.slice(0, 4).map((g) => (

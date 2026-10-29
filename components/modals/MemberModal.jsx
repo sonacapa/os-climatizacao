@@ -19,8 +19,8 @@ function AccessPicker({ value, onChange, disabled }) {
     <div className="space-y-2">
       {ACCESS.map((o) => (
         <button key={o.v} type="button" disabled={disabled} onClick={() => onChange(o.v)}
-          className={`w-full text-left rounded-xl border px-3.5 py-2.5 flex gap-3 ${value === o.v ? 'border-sky-500 bg-sky-50' : 'border-slate-200 hover:bg-slate-50'} disabled:opacity-60`}>
-          <span className={`mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${value === o.v ? 'bg-sky-600 border-sky-600 text-white' : 'border-slate-300'}`}>
+          className={`w-full text-left rounded-xl border px-3.5 py-2.5 flex gap-3 ${value === o.v ? 'border-brand-500 bg-brand-50' : 'border-slate-200 hover:bg-slate-50'} disabled:opacity-60`}>
+          <span className={`mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${value === o.v ? 'bg-brand-600 border-brand-600 text-white' : 'border-slate-300'}`}>
             {value === o.v && <Check className="w-3 h-3" strokeWidth={3} />}
           </span>
           <span><span className="block text-sm font-semibold text-slate-900">{o.title}</span><span className="block text-xs text-slate-500">{o.text}</span></span>

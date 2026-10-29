@@ -8,7 +8,7 @@ export default function AccountTab() {
   return (
     <div className="space-y-4">
       <Card className="p-5 flex items-center gap-4">
-        <span className="w-14 h-14 rounded-full bg-sky-100 text-sky-700 text-xl font-bold flex items-center justify-center">{me.name.slice(0, 1).toUpperCase()}</span>
+        <span className="w-14 h-14 rounded-full bg-brand-100 text-brand-700 text-xl font-bold flex items-center justify-center">{me.name.slice(0, 1).toUpperCase()}</span>
         <div className="min-w-0">
           <p className="font-bold text-slate-900 truncate">{me.name}</p>
           <p className="text-sm text-slate-500 truncate">{me.email}</p>

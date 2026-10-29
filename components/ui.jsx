@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { ITEM_STATUS, STATUS, logoUrl } from '@/lib/utils';
 
 export const inputCls =
-  'w-full border border-slate-300 rounded-xl px-3.5 py-2.5 bg-white text-slate-900 placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500';
+  'w-full min-h-[46px] border border-slate-300 rounded-xl px-3.5 py-2.5 bg-white text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500';
 
 export function Field({ label, hint, children, className = '' }) {
   return (
@@ -18,16 +18,16 @@ export function Field({ label, hint, children, className = '' }) {
 }
 
 const VARIANTS = {
-  primary: 'bg-sky-600 text-white hover:bg-sky-700 disabled:bg-sky-300',
+  primary: 'bg-brand-600 text-white hover:bg-brand-700 disabled:bg-brand-300',
   success: 'bg-emerald-600 text-white hover:bg-emerald-700 disabled:bg-emerald-300',
   secondary: 'bg-white text-slate-800 border border-slate-300 hover:bg-slate-50 disabled:text-slate-400',
-  soft: 'bg-sky-50 text-sky-800 hover:bg-sky-100 disabled:opacity-50',
+  soft: 'bg-brand-50 text-brand-800 hover:bg-brand-100 disabled:opacity-50',
   danger: 'bg-rose-600 text-white hover:bg-rose-700 disabled:bg-rose-300',
   dangerSoft: 'bg-rose-50 text-rose-700 hover:bg-rose-100 disabled:opacity-50',
   whatsapp: 'bg-[#25D366] text-white hover:bg-[#1fbd5b] disabled:opacity-50',
   ghost: 'text-slate-600 hover:bg-slate-100 disabled:opacity-50'
 };
-const SIZES = { sm: 'px-3 py-1.5 text-sm gap-1.5', md: 'px-4 py-2.5 text-sm gap-2', lg: 'px-5 py-3.5 text-base gap-2' };
+const SIZES = { sm: 'px-3 py-2 text-sm gap-1.5 min-h-[38px]', md: 'px-4 py-2.5 text-sm gap-2 min-h-[44px]', lg: 'px-5 py-3.5 text-base gap-2 min-h-[52px]' };
 
 export function Btn({ variant = 'primary', size = 'md', icon: Icon, loading, className = '', children, ...props }) {
   return (
@@ -35,7 +35,7 @@ export function Btn({ variant = 'primary', size = 'md', icon: Icon, loading, cla
       type="button"
       {...props}
       disabled={props.disabled || loading}
-      className={`inline-flex items-center justify-center font-semibold rounded-xl transition-colors ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-semibold rounded-xl transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : Icon ? <Icon className="w-4 h-4 shrink-0" /> : null}
       {children}
@@ -81,7 +81,7 @@ export function Modal({ title, subtitle, onClose, children, footer, maxWidth = '
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`sheet-in bg-white w-full ${maxWidth} rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[94vh] sm:max-h-[90vh] ${printArea ? 'print-area' : ''}`}
+        className={`sheet-in bg-white w-full ${maxWidth} rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[88vh] ${printArea ? 'print-area' : ''}`}
       >
         <div className="flex items-start justify-between gap-3 px-5 pt-5 pb-3 no-print">
           <div className="min-w-0">
@@ -90,8 +90,8 @@ export function Modal({ title, subtitle, onClose, children, footer, maxWidth = '
           </div>
           <IconBtn icon={X} label="Fechar" onClick={onClose} className="-mr-2 -mt-1" />
         </div>
-        <div className="px-5 pb-5 overflow-y-auto flex-1">{children}</div>
-        {footer && <div className="px-5 py-3 border-t border-slate-100 bg-white rounded-b-2xl no-print safe-bottom">{footer}</div>}
+        <div className="px-5 pb-6 overflow-y-auto flex-1">{children}</div>
+        {footer && <div className="px-5 pt-3 modal-foot border-t border-slate-100 bg-white sm:rounded-b-2xl no-print">{footer}</div>}
       </div>
     </div>
   );
@@ -112,14 +112,14 @@ export function Chip({ children, tone = 'slate', className = '' }) {
     green: 'bg-emerald-100 text-emerald-800',
     amber: 'bg-amber-100 text-amber-800',
     red: 'bg-rose-100 text-rose-800',
-    sky: 'bg-sky-100 text-sky-800'
+    sky: 'bg-brand-100 text-brand-800'
   };
   return <span className={`text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${tones[tone]} ${className}`}>{children}</span>;
 }
 
 export function Card({ children, className = '', ...props }) {
   return (
-    <div {...props} className={`bg-white rounded-2xl border border-slate-200 shadow-sm ${className}`}>
+    <div {...props} className={`bg-white rounded-2xl border border-slate-200/80 shadow-card ${className}`}>
       {children}
     </div>
   );
@@ -182,7 +182,7 @@ export function Logo({ company, size = 'md', dark = false }) {
     return <img src={url} alt="" className={`${box} object-contain rounded-lg bg-white shrink-0`} />;
   }
   return (
-    <div className={`${box} rounded-xl bg-sky-600 text-white flex items-center justify-center shrink-0`}>
+    <div className={`${box} rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0`}>
       <Wind className={size === 'lg' ? 'w-8 h-8' : size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'} />
     </div>
   );
@@ -216,7 +216,7 @@ export function SavedField({ value, onSave, as = 'input', ...props }) {
 export function FullLoading({ text = 'Carregando…' }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-slate-50 text-slate-500 text-sm">
-      <Loader2 className="w-6 h-6 animate-spin text-sky-600" />
+      <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
       {text}
     </div>
   );
@@ -231,7 +231,7 @@ export function Toggle({ checked, onChange, label }) {
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`w-11 h-6 rounded-full relative transition-colors ${checked ? 'bg-sky-600' : 'bg-slate-300'}`}
+        className={`w-11 h-6 rounded-full relative transition-colors ${checked ? 'bg-brand-600' : 'bg-slate-300'}`}
       >
         <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${checked ? 'left-[22px]' : 'left-0.5'}`} />
       </button>

@@ -71,7 +71,7 @@ function GroupCard({ g }) {
         })}
       </ul>
       {machines.length > 3 && (
-        <button onClick={() => setAll(!all)} className="text-sm font-semibold text-sky-700 inline-flex items-center gap-1">
+        <button onClick={() => setAll(!all)} className="text-sm font-semibold text-brand-700 inline-flex items-center gap-1">
           {all ? 'Mostrar menos' : `Ver mais ${machines.length - 3}`} <ChevronDown className={`w-4 h-4 ${all ? 'rotate-180' : ''}`} />
         </button>
       )}

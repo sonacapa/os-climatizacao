@@ -38,13 +38,13 @@ export default function ClientsView() {
           <SearchBox value={q} onChange={setQ} placeholder="Buscar cliente ou aparelho" />
           <Card className="divide-y divide-slate-100 overflow-hidden">
             {rows.map(({ c, count, hits }) => (
-              <button key={c.id} onClick={() => setSelId(c.id)} className={`w-full text-left px-4 py-3 hover:bg-slate-50 ${selId === c.id ? 'bg-sky-50' : ''}`}>
+              <button key={c.id} onClick={() => setSelId(c.id)} className={`w-full text-left px-4 py-3 hover:bg-slate-50 ${selId === c.id ? 'bg-brand-50' : ''}`}>
                 <div className="flex items-center justify-between gap-2">
                   <p className="font-semibold text-slate-900 truncate">{c.name}</p>
                   <span className="text-xs text-slate-500 shrink-0">{count} {count === 1 ? 'aparelho' : 'aparelhos'}</span>
                 </div>
                 <p className="text-xs text-slate-500 truncate">{c.address || c.phone || 'Sem endereço'}</p>
-                {hits.length > 0 && <p className="text-xs text-sky-700 mt-0.5 truncate">Aparelho: {hits.slice(0, 2).map((h) => `${h.code} · ${h.location_tag}`).join(', ')}</p>}
+                {hits.length > 0 && <p className="text-xs text-brand-700 mt-0.5 truncate">Aparelho: {hits.slice(0, 2).map((h) => `${h.code} · ${h.location_tag}`).join(', ')}</p>}
               </button>
             ))}
             {rows.length === 0 && (
@@ -73,7 +73,7 @@ function ClientDetail({ client, onBack }) {
 
   return (
     <div className="space-y-4">
-      <button onClick={onBack} className="md:hidden inline-flex items-center gap-1.5 text-sm font-semibold text-sky-700"><ArrowLeft className="w-4 h-4" /> Todos os clientes</button>
+      <button onClick={onBack} className="md:hidden inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700"><ArrowLeft className="w-4 h-4" /> Todos os clientes</button>
       <Card className="p-5 space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">

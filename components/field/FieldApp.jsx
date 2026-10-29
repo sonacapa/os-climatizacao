@@ -32,22 +32,22 @@ export default function FieldApp() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-4 h-14 flex items-center gap-3">
+      <header className="sticky top-0 z-30 bg-brand-700 text-white px-4 h-14 flex items-center gap-3 shadow-card">
         <Logo company={data.company} size="sm" />
-        <p className="font-bold text-slate-900 flex-1 truncate">{data.company?.name}</p>
+        <p className="font-bold flex-1 truncate">{data.company?.name}</p>
         <ModeSwitch />
       </header>
-      <main className="flex-1 w-full max-w-2xl mx-auto p-4 pb-28">
+      <main className="flex-1 w-full max-w-2xl mx-auto p-4 pb-36">
         {tab === 'chamados' && <JobsTab />}
         {tab === 'scan' && <ScanTab />}
         {tab === 'maquinas' && <MachinesTab />}
         {tab === 'conta' && <AccountTab />}
       </main>
-      <nav className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 safe-bottom">
+      <nav className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 shadow-pop safe-bottom">
         <div className="max-w-2xl mx-auto grid grid-cols-4">
           {TABS.map((t) => (
             <button key={t.id} onClick={() => setTab(t.id)} aria-current={tab === t.id ? 'page' : undefined}
-              className={`flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold ${tab === t.id ? 'text-sky-700' : 'text-slate-500'}`}>
+              className={`flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold ${tab === t.id ? 'text-brand-700' : 'text-slate-500'}`}>
               <t.icon className="w-6 h-6" /> {t.label}
             </button>
           ))}

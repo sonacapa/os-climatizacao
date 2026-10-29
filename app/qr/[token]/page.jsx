@@ -33,7 +33,7 @@ export default async function PublicEquipmentPage({ params }) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={logoUrl(company.logo_path)} alt="" className="w-10 h-10 object-contain rounded-lg bg-white" />
         ) : (
-          <div className="bg-sky-500 p-2 rounded-xl"><Wind className="w-5 h-5" /></div>
+          <div className="bg-brand-500 p-2 rounded-xl"><Wind className="w-5 h-5" /></div>
         )}
         <div>
           <p className="text-sm font-bold leading-tight">{company.name}</p>
@@ -76,15 +76,16 @@ export default async function PublicEquipmentPage({ params }) {
           {history.length === 0 ? (
             <p className="text-xs text-slate-500">Nenhum serviço registrado para este aparelho ainda.</p>
           ) : (
-            <ul className="space-y-3 border-l-2 border-sky-500 pl-4">
+            <ul className="space-y-3 border-l-2 border-brand-500 pl-4">
               {history.map((h, i) => (
                 <li key={i} className="space-y-1.5">
                   <p className="text-sm font-semibold text-slate-900">{fmtDate(h.date)} · {h.service}</p>
                   {h.warranty_days > 0 && <p className="text-xs text-slate-500">Garantia de {h.warranty_days} dias</p>}
+                  {h.token && <a href={`/laudo/${h.token}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg">Ver laudo desta visita →</a>}
                   {h.materials.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
                       {h.materials.map((m, j) => (
-                        <span key={j} className="text-[11px] bg-sky-100 text-sky-900 font-semibold px-2.5 py-1 rounded-lg">
+                        <span key={j} className="text-[11px] bg-brand-100 text-brand-900 font-semibold px-2.5 py-1 rounded-lg">
                           {m.quantity} {m.unit} · {m.name}
                         </span>
                       ))}

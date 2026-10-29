@@ -52,7 +52,7 @@ export default function ScanResultModal({ info }) {
           )}
         </div>
         {existing ? (
-          <p className="text-sm bg-sky-50 text-sky-800 rounded-lg px-3 py-2">Este aparelho está no chamado de {client.name} que já está na sua agenda.</p>
+          <p className="text-sm bg-brand-50 text-brand-800 rounded-lg px-3 py-2">Este aparelho está no chamado de {client.name} que já está na sua agenda.</p>
         ) : (
           <Field label="Tipo de serviço">
             <select value={type} onChange={(e) => setType(e.target.value)} className={inputCls}>

@@ -14,7 +14,7 @@ export default function OsCard({ os, showDate }) {
   return (
     <button
       onClick={() => openModal('osDetail', { osId: os.id })}
-      className="w-full text-left bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-sky-300 hover:shadow transition p-4 space-y-2"
+      className="w-full text-left bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-brand-300 hover:shadow transition p-4 space-y-2"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">

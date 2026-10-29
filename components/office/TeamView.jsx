@@ -16,7 +16,7 @@ export default function TeamView() {
       <Card className="divide-y divide-slate-100 overflow-hidden">
         {data.profiles.map((p) => (
           <button key={p.id} onClick={() => openModal('member', { member: p })} className="w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-slate-50">
-            <span className="w-10 h-10 rounded-full bg-sky-100 text-sky-700 font-bold flex items-center justify-center shrink-0">{p.name.slice(0, 1).toUpperCase()}</span>
+            <span className="w-10 h-10 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center shrink-0">{p.name.slice(0, 1).toUpperCase()}</span>
             <span className="min-w-0 flex-1">
               <span className="block font-semibold text-slate-900 truncate">{p.name}{p.id === me.id && <span className="text-slate-400 font-normal"> (você)</span>}</span>
               <span className="block text-xs text-slate-500 truncate">{p.email || '—'}</span>

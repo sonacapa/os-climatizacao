@@ -1,6 +1,6 @@
 'use client';
 import { FileText, MessageCircle } from 'lucide-react';
-import { laudoUrl, waLink } from '@/lib/utils';
+import { laudoUrl, visitUrl, waLink } from '@/lib/utils';
 import { useApp } from '../AppContext';
 import { eqTitle } from '../shared';
 import { Btn, Modal } from '../ui';
@@ -18,12 +18,12 @@ export default function ShareLaudosModal({ osId }) {
     const eq = getEq(it.equipment_id);
     return `Olá, ${first}! Segue o laudo do aparelho ${eqTitle(eq)} (${eq.location_tag || eq.code}) – ${data.company.name}:\n${laudoUrl(it)}`;
   };
-  const all = `Olá, ${first}! Seguem os laudos do atendimento de hoje – ${data.company.name}:\n\n` +
-    done.map((it) => { const eq = getEq(it.equipment_id); return `• ${eqTitle(eq)} (${eq.location_tag || eq.code}): ${laudoUrl(it)}`; }).join('\n');
+  const all = `Olá, ${first}! Seguem os laudos do atendimento – ${data.company.name}. Todos os aparelhos neste link:\n${visitUrl(os)}`;
 
   return (
     <Modal title="Enviar laudos ao cliente" subtitle={client.name} onClose={closeModal}
-      footer={done.length > 1 ? <a href={waLink(client.phone, all)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white font-semibold py-3 text-sm"><MessageCircle className="w-4 h-4" /> Enviar todos em uma mensagem</a> : undefined}>
+      footer={done.length > 1 ? <a href={waLink(client.phone, all)} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white font-semibold py-3.5 text-base"><MessageCircle className="w-5 h-5" /> Enviar todos os laudos de uma vez</a> : undefined}>
+      {done.length > 1 && <p className="text-sm text-slate-600 mb-3">O cliente recebe <strong>um único link</strong> com os {done.length} laudos, um por aparelho, e baixa tudo em um só PDF. Ou envie um por um abaixo.</p>}
       {!client.phone && <p className="text-sm bg-amber-50 text-amber-800 rounded-lg px-3 py-2 mb-3">Este cliente não tem WhatsApp cadastrado. Você poderá escolher o contato ao abrir o WhatsApp.</p>}
       {done.length === 0 && <p className="text-sm text-slate-500">Nenhum aparelho concluído nesta visita.</p>}
       <ul className="space-y-2">

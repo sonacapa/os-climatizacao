@@ -12,8 +12,8 @@ export default function ScreenFrame({ title, subtitle, onBack, right, children, 
         </div>
         {right}
       </header>
-      <main className={`flex-1 w-full max-w-2xl mx-auto p-4 space-y-4 ${footer ? 'pb-32' : 'pb-10'}`}>{children}</main>
-      {footer && <div className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 safe-bottom"><div className="max-w-2xl mx-auto p-3">{footer}</div></div>}
+      <main className={`flex-1 w-full max-w-2xl mx-auto p-4 space-y-4 ${footer ? 'pb-44' : 'pb-12'}`}>{children}</main>
+      {footer && <div className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 shadow-pop safe-bottom"><div className="max-w-2xl mx-auto px-4 pt-3 pb-4">{footer}</div></div>}
     </div>
   );
 }

@@ -14,7 +14,7 @@ const WARRANTY = [0, 30, 90, 180, 365];
 const PREVENTIVE = [0, 3, 6, 12];
 
 export default function ItemScreen({ osId, itemId, onBack }) {
-  const { data, run, openModal, getClient, getEq, toast } = useApp();
+  const { data, run, openModal, getClient, getEq, toast, confirm } = useApp();
   const os = data.orders.find((o) => o.id === osId);
   const item = os?.items.find((i) => i.id === itemId);
   const eq = item && getEq(item.equipment_id);
@@ -26,14 +26,21 @@ export default function ItemScreen({ osId, itemId, onBack }) {
   if (!os || !item || !eq) return null;
   const client = getClient(os.client_id);
   const locked = item.status !== 'pendente';
-  const w = warranty ?? item.warranty_days ?? data.company.warranty_days ?? 0;
-  const p = preventive ?? item.preventive_months ?? data.company.preventive_months ?? 0;
+  // garantia e preventiva são decididas pelo técnico em cada serviço (sem valor pré-marcado)
+  const w = warranty ?? item.warranty_days ?? null;
+  const p = preventive ?? item.preventive_months ?? null;
+  const termsRef = useRef(null);
   const today = spDate(new Date().toISOString());
   const checklistPending = item.checklist.filter((c) => c.status === 'pending').length;
 
   const patch = (v) => run(() => api.patchItem(item.id, v));
 
   const finish = async () => {
+    if (w === null || p === null) {
+      termsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return toast('Escolha a garantia e a próxima preventiva deste serviço.', 'error');
+    }
+    if (checklistPending > 0 && !(await confirm({ title: 'Checklist incompleto', message: `Há ${checklistPending} ${checklistPending === 1 ? 'etapa' : 'etapas'} sem resultado. Concluir mesmo assim?`, confirmLabel: 'Concluir', cancelLabel: 'Voltar' }))) return;
     setBusy(true);
     const r = await run(() => api.patchItem(item.id, { status: 'feito', warranty_days: Number(w), preventive_months: Number(p) }), 'Aparelho concluído');
     setBusy(false);
@@ -50,7 +57,7 @@ export default function ItemScreen({ osId, itemId, onBack }) {
   return (
     <ScreenFrame title={eq.location_tag || eq.code} subtitle={`${eqTitle(eq)} · ${client?.name}`} onBack={onBack}
       footer={!locked ? (
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <Btn size="lg" variant="dangerSoft" icon={XCircle} onClick={() => setFailing(true)} aria-label="Não foi possível realizar" className="px-4" />
           <Btn size="lg" variant="success" icon={CheckCircle2} className="flex-1" loading={busy} onClick={finish}>Serviço realizado</Btn>
         </div>
@@ -91,7 +98,7 @@ export default function ItemScreen({ osId, itemId, onBack }) {
       </Card>
 
       <Section title="Checklist" right={!locked && checklistPending > 0 && (
-        <button className="text-sm font-semibold text-sky-700" onClick={() => run(async () => { for (const c of item.checklist.filter((x) => x.status === 'pending')) await api.setChecklistStatus(c.id, 'ok'); })}>Marcar tudo OK</button>
+        <button className="text-sm font-semibold text-brand-700" onClick={() => run(async () => { for (const c of item.checklist.filter((x) => x.status === 'pending')) await api.setChecklistStatus(c.id, 'ok'); })}>Marcar tudo OK</button>
       )}>
         <div className="space-y-2">
           {item.checklist.map((c) => (
@@ -128,15 +135,15 @@ export default function ItemScreen({ osId, itemId, onBack }) {
       </Section>
 
       <Section title="Garantia e próxima preventiva">
-        <div className="space-y-4">
+        <div className="space-y-4" ref={termsRef}>
           <div>
             <p className="text-sm font-medium text-slate-700 mb-1.5">Garantia deste serviço</p>
-            <Choice disabled={locked} options={WARRANTY} value={Number(w)} onChange={(v) => { setWarranty(v); patch({ warranty_days: v }); }} fmt={(v) => (v === 0 ? 'Sem' : v === 365 ? '1 ano' : `${v} dias`)} custom={{ unit: 'dias' }} />
-            <p className="text-xs text-slate-500 mt-1.5">{Number(w) > 0 ? `Válida até ${fmtDate(addDaysISO(item.completed_at ? spDate(item.completed_at) : today, Number(w)))}` : 'Este serviço não terá garantia.'}</p>
+            <Choice disabled={locked} options={WARRANTY} value={w === null ? null : Number(w)} onChange={(v) => { setWarranty(v); patch({ warranty_days: v }); }} fmt={(v) => (v === 0 ? 'Sem' : v === 365 ? '1 ano' : `${v} dias`)} custom={{ unit: 'dias' }} />
+            <p className="text-xs text-slate-500 mt-1.5">{w === null ? 'Escolha uma opção.' : Number(w) > 0 ? `Válida até ${fmtDate(addDaysISO(item.completed_at ? spDate(item.completed_at) : today, Number(w)))}` : 'Este serviço não terá garantia.'}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-slate-700 mb-1.5">Próxima preventiva em</p>
-            <Choice disabled={locked} options={PREVENTIVE} value={Number(p)} onChange={(v) => { setPreventive(v); patch({ preventive_months: v }); }} fmt={(v) => (v === 0 ? 'Não' : v === 12 ? '1 ano' : `${v} meses`)} custom={{ unit: 'meses' }} />
+            <Choice disabled={locked} options={PREVENTIVE} value={p === null ? null : Number(p)} onChange={(v) => { setPreventive(v); patch({ preventive_months: v }); }} fmt={(v) => (v === 0 ? 'Não' : v === 12 ? '1 ano' : `${v} meses`)} custom={{ unit: 'meses' }} />
           </div>
         </div>
       </Section>
@@ -173,18 +180,18 @@ function AddLine({ placeholder, onAdd }) {
 
 function Choice({ options, value, onChange, fmt, disabled, custom }) {
   const [editing, setEditing] = useState(false);
-  const isCustom = !options.includes(value);
+  const isCustom = value !== null && !options.includes(value);
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((o) => (
         <button key={o} disabled={disabled} onClick={() => { setEditing(false); onChange(o); }}
-          className={`px-4 py-2 rounded-xl text-sm font-bold border ${value === o && !editing ? 'bg-sky-600 border-sky-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>{fmt(o)}</button>
+          className={`px-4 py-2 rounded-xl text-sm font-bold border ${value === o && !editing ? 'bg-brand-600 border-brand-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>{fmt(o)}</button>
       ))}
       {editing ? (
         <input autoFocus type="number" min="0" inputMode="numeric" placeholder={custom.unit} onBlur={(e) => { const n = Number(e.target.value); if (n >= 0 && e.target.value !== '') onChange(n); setEditing(false); }}
-          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()} className="w-24 border border-sky-500 rounded-xl px-3 py-2 text-sm" />
+          onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()} className="w-24 border border-brand-500 rounded-xl px-3 py-2 text-sm" />
       ) : (
-        <button disabled={disabled} onClick={() => setEditing(true)} className={`px-4 py-2 rounded-xl text-sm font-bold border ${isCustom ? 'bg-sky-600 border-sky-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>
+        <button disabled={disabled} onClick={() => setEditing(true)} className={`px-4 py-2 rounded-xl text-sm font-bold border ${isCustom ? 'bg-brand-600 border-brand-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>
           {isCustom ? `${value} ${custom.unit}` : 'Outro'}
         </button>
       )}
@@ -252,7 +259,7 @@ function PhotoSlot({ os, item, field, label, locked }) {
     if (!file) return;
     setBusy(true);
     await run(async () => {
-      const blob = await compressImage(file);
+      const blob = await compressImage(file, { maxSide: 1280, quality: 0.72, maxBytes: 260 * 1024 });
       const np = await api.uploadFile('os-photos', os.id, `${label.toLowerCase()}-${item.id.slice(0, 8)}.jpg`, blob, 'image/jpeg', path);
       await api.patchItem(item.id, { [field]: np });
     });

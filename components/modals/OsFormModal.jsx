@@ -76,7 +76,7 @@ export default function OsFormModal({ os, preset = {} }) {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-slate-700">Aparelhos a atender *</span>
-              <div className="flex gap-3 text-sm font-semibold text-sky-700">
+              <div className="flex gap-3 text-sm font-semibold text-brand-700">
                 <button type="button" onClick={() => setSel(new Set([...sel, ...machines.map((m) => m.id)]))}>Marcar todos</button>
                 <button type="button" onClick={() => setSel(new Set([...locked]))}>Limpar</button>
               </div>

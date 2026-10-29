@@ -12,7 +12,7 @@ export default function SettingsView() {
   const c = data.company;
   const [f, setF] = useState({
     name: c.name || '', document: c.document || '', phone: c.phone || '', email: c.email || '', address: c.address || '',
-    technical_responsible: c.technical_responsible || '', warranty_days: c.warranty_days ?? 90, preventive_months: c.preventive_months ?? 6
+    technical_responsible: c.technical_responsible || ''
   });
   const [busy, setBusy] = useState(false);
   const [busyLogo, setBusyLogo] = useState(false);
@@ -23,7 +23,7 @@ export default function SettingsView() {
     e.preventDefault();
     if (!f.name.trim()) return toast('Informe o nome da empresa.', 'error');
     setBusy(true);
-    await run(() => api.updateSettings({ ...f, name: f.name.trim(), warranty_days: Number(f.warranty_days) || 0, preventive_months: Number(f.preventive_months) || 0 }), 'Dados da empresa salvos');
+    await run(() => api.updateSettings({ ...f, name: f.name.trim() }), 'Dados da empresa salvos');
     setBusy(false);
   };
 
@@ -33,7 +33,7 @@ export default function SettingsView() {
     if (!file) return;
     setBusyLogo(true);
     await run(async () => {
-      const blob = await compressImage(file, 600, 0.92, 'image/png');
+      const blob = await compressImage(file, { maxSide: 512, type: 'image/png' });
       await api.uploadLogo(blob, c.logo_path);
     }, 'Logomarca atualizada');
     setBusyLogo(false);
@@ -54,7 +54,7 @@ export default function SettingsView() {
                 <Btn variant="secondary" icon={ImagePlus} loading={busyLogo} onClick={() => fileRef.current?.click()}>{c.logo_path ? 'Trocar logo' : 'Enviar logo'}</Btn>
                 {c.logo_path && <Btn variant="dangerSoft" icon={Trash2} onClick={() => run(() => api.removeLogo(c.logo_path), 'Logomarca removida')}>Remover</Btn>}
               </div>
-              <p className="text-xs text-slate-500">PNG ou JPG, de preferência quadrada. Será usada nos laudos e nas telas.</p>
+              <p className="text-xs text-slate-500">PNG ou JPG, de preferência quadrada. Será usada nos laudos e nas telas. A imagem é reduzida automaticamente.</p>
             </div>
           </div>
           <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={pickLogo} className="hidden" />
@@ -72,12 +72,6 @@ export default function SettingsView() {
             </div>
             <Field label="Endereço"><input value={f.address} onChange={set('address')} className={inputCls} /></Field>
 
-            <h2 className="font-semibold text-slate-900 pt-3">Valores padrão</h2>
-            <p className="text-xs text-slate-500 -mt-2">O técnico pode mudar a garantia e a próxima preventiva em cada serviço. Estes valores só são sugeridos.</p>
-            <div className="grid sm:grid-cols-2 gap-3">
-              <Field label="Garantia sugerida (dias)"><input type="number" min="0" value={f.warranty_days} onChange={set('warranty_days')} className={inputCls} /></Field>
-              <Field label="Preventiva a cada (meses)"><input type="number" min="0" value={f.preventive_months} onChange={set('preventive_months')} className={inputCls} /></Field>
-            </div>
             <Btn type="submit" loading={busy} className="w-full sm:w-auto">Salvar dados</Btn>
           </Card>
         </form>
