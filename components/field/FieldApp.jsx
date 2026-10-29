@@ -31,10 +31,10 @@ export default function FieldApp() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
-      <header className="sticky top-0 z-30 bg-brand-700 text-white px-4 h-14 flex items-center gap-3 shadow-card">
+    <div className="min-h-screen flex flex-col bg-paper">
+      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 text-ink px-4 h-14 flex items-center gap-3">
         <Logo company={data.company} size="sm" />
-        <p className="font-bold flex-1 truncate">{data.company?.name}</p>
+        <p className="font-display font-bold text-lg flex-1 truncate">{data.company?.name}</p>
         <ModeSwitch />
       </header>
       <main className="flex-1 w-full max-w-2xl mx-auto p-4 pb-36">
@@ -47,8 +47,8 @@ export default function FieldApp() {
         <div className="max-w-2xl mx-auto grid grid-cols-4">
           {TABS.map((t) => (
             <button key={t.id} onClick={() => setTab(t.id)} aria-current={tab === t.id ? 'page' : undefined}
-              className={`flex flex-col items-center gap-0.5 py-2.5 text-[11px] font-semibold ${tab === t.id ? 'text-brand-700' : 'text-slate-500'}`}>
-              <t.icon className="w-6 h-6" /> {t.label}
+              className={`flex flex-col items-center gap-1 pt-2 pb-2.5 text-[11px] font-semibold ${tab === t.id ? 'text-brand-700' : 'text-slate-500'}`}>
+              <span className={`px-5 py-1 rounded-full transition-colors ${tab === t.id ? 'bg-brand-100' : ''}`}><t.icon className="w-5 h-5" /></span> {t.label}
             </button>
           ))}
         </div>

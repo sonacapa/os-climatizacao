@@ -46,7 +46,7 @@ export default function SettingsView() {
         <Card className="p-5">
           <h2 className="font-semibold text-slate-900 mb-3">Logomarca</h2>
           <div className="flex items-center gap-4">
-            <div className="w-24 h-24 rounded-2xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden">
+            <div className="w-24 h-24 rounded-xl border border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden">
               {c.logo_path ? <Logo company={c} size="lg" /> : <ImagePlus className="w-8 h-8 text-slate-300" />}
             </div>
             <div className="space-y-2">

@@ -1,21 +1,21 @@
 'use client';
-import { AlertTriangle, BellRing, CalendarCheck, CheckCircle2, Plus, Truck, UserPlus } from 'lucide-react';
+import { AlertTriangle, Plus, UserPlus } from 'lucide-react';
 import { OPEN, fmtDate, relDay, todayISO } from '@/lib/utils';
 import { useApp } from '../AppContext';
 import { PageHeader, dueGroups, spDate } from '../shared';
 import { Btn, Card } from '../ui';
 import OsCard from './OsCard';
 
-function Stat({ icon: Icon, tone, value, label, onClick }) {
-  const tones = { sky: 'bg-brand-50 text-brand-700', indigo: 'bg-indigo-50 text-indigo-700', green: 'bg-emerald-50 text-emerald-700', amber: 'bg-amber-50 text-amber-700' };
+function Stat({ dot, value, label, onClick }) {
   return (
-    <button onClick={onClick} className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 text-left hover:border-brand-300 transition">
-      <span className={`inline-flex p-2 rounded-xl ${tones[tone]}`}><Icon className="w-5 h-5" /></span>
-      <p className="text-3xl font-bold text-slate-900 mt-2">{value}</p>
-      <p className="text-sm text-slate-500">{label}</p>
+    <button onClick={onClick} className="text-left px-4 py-4 bg-white hover:bg-slate-50 transition-colors">
+      <p className="num text-4xl font-bold text-ink leading-none">{value}</p>
+      <p className="text-sm text-slate-600 mt-2 flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${dot}`} />{label}</p>
     </button>
   );
 }
+
+const greeting = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; };
 
 export default function Dashboard({ go }) {
   const { data, me, openModal } = useApp();
@@ -31,7 +31,7 @@ export default function Dashboard({ go }) {
 
   return (
     <div className="space-y-6">
-      <PageHeader title={`Olá, ${firstName}`} subtitle={fmtDate(today)}>
+      <PageHeader title={`${greeting()}, ${firstName}`} subtitle={fmtDate(today)}>
         <Btn icon={Plus} onClick={() => openModal('os')}>Nova O.S.</Btn>
         <Btn variant="secondary" icon={UserPlus} onClick={() => openModal('client')}>Novo cliente</Btn>
       </PageHeader>
@@ -48,34 +48,34 @@ export default function Dashboard({ go }) {
         </Card>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <Stat icon={CalendarCheck} tone="sky" value={todays.length} label="Visitas hoje" onClick={() => go('os', { filter: 'hoje' })} />
-        <Stat icon={Truck} tone="indigo" value={running.length} label="Em andamento" onClick={() => go('os', { filter: 'abertas' })} />
-        <Stat icon={CheckCircle2} tone="green" value={doneToday} label="Concluídas hoje" onClick={() => go('os', { filter: 'concluidas' })} />
-        <Stat icon={BellRing} tone="amber" value={due.length} label={due.length === 1 ? 'Cliente com preventiva' : 'Clientes com preventiva'} onClick={() => go('preventivas')} />
-      </div>
+      <Card className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 overflow-hidden">
+        <Stat dot="bg-amber-500" value={todays.length} label="Visitas hoje" onClick={() => go('os', { filter: 'hoje' })} />
+        <Stat dot="bg-brand-500" value={running.length} label="Em andamento" onClick={() => go('os', { filter: 'abertas' })} />
+        <Stat dot="bg-emerald-500" value={doneToday} label="Concluídas hoje" onClick={() => go('os', { filter: 'concluidas' })} />
+        <Stat dot="bg-heat-500" value={due.length} label={due.length === 1 ? 'Cliente com preventiva' : 'Clientes com preventiva'} onClick={() => go('preventivas')} />
+      </Card>
 
       {late.length > 0 && (
         <section className="space-y-2">
           <h2 className="font-bold text-rose-700 flex items-center gap-2"><AlertTriangle className="w-5 h-5" /> Atrasadas ({late.length})</h2>
-          <div className="grid gap-2 md:grid-cols-2">{late.slice(0, 4).map((o) => <OsCard key={o.id} os={o} showDate={relDay(o.scheduled_date)} />)}</div>
+          <div className="grid gap-2 grid-cols-1 md:grid-cols-2 [&>*]:min-w-0">{late.slice(0, 4).map((o) => <OsCard key={o.id} os={o} showDate={relDay(o.scheduled_date)} />)}</div>
           {late.length > 4 && <button onClick={() => go('os', { filter: 'abertas' })} className="text-sm font-semibold text-brand-700">Ver todas</button>}
         </section>
       )}
 
       <section className="space-y-2">
-        <h2 className="font-bold text-slate-900">Agenda de hoje</h2>
+        <h2 className="font-bold text-lg text-ink">Agenda de hoje</h2>
         {todays.length === 0 ? (
           <Card className="p-6 text-center text-sm text-slate-500">Nenhuma visita agendada para hoje.</Card>
         ) : (
-          <div className="grid gap-2 md:grid-cols-2">{todays.map((o) => <OsCard key={o.id} os={o} />)}</div>
+          <div className="grid gap-2 grid-cols-1 md:grid-cols-2 [&>*]:min-w-0">{todays.map((o) => <OsCard key={o.id} os={o} />)}</div>
         )}
       </section>
 
       {due.length > 0 && (
         <section className="space-y-2">
           <div className="flex items-center justify-between">
-            <h2 className="font-bold text-slate-900">Preventivas para avisar</h2>
+            <h2 className="font-bold text-lg text-ink">Preventivas para avisar</h2>
             <button onClick={() => go('preventivas')} className="text-sm font-semibold text-brand-700">Ver todas</button>
           </div>
           <Card className="divide-y divide-slate-100">

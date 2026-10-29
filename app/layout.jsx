@@ -1,7 +1,8 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Bricolage_Grotesque, Figtree } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
+const display = Bricolage_Grotesque({ subsets: ['latin'], display: 'swap', variable: '--font-display' });
+const body = Figtree({ subsets: ['latin'], display: 'swap', variable: '--font-body' });
 
 export const metadata = {
   title: 'Ordens de Serviço · Climatização',
@@ -9,11 +10,11 @@ export const metadata = {
   appleWebApp: { capable: true, title: 'O.S. Clima', statusBarStyle: 'default' }
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#127a98' };
+export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#f2f4f8' };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-BR" className={inter.variable}>
+    <html lang="pt-BR" className={`${display.variable} ${body.variable}`}>
       <body className="font-sans">{children}</body>
     </html>
   );

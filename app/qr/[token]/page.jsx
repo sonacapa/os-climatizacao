@@ -42,7 +42,7 @@ export default async function PublicEquipmentPage({ params }) {
       </header>
 
       <div className="max-w-xl mx-auto p-4 space-y-4">
-        <section className="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+        <section className="bg-white rounded-xl border border-slate-200 p-5 space-y-3">
           <span className="font-mono text-xs font-bold bg-slate-900 text-emerald-400 px-2.5 py-1 rounded-lg">{eq.code}</span>
           <h1 className="text-lg font-bold text-slate-900">{eq.brand} {eq.model} · {eq.btus} BTUs</h1>
           <p className="text-sm text-slate-600">{eq.location} · Gás {eq.gas} · {eq.voltage}</p>
@@ -67,11 +67,11 @@ export default async function PublicEquipmentPage({ params }) {
         </section>
 
         <a href={wa} target="_blank" rel="noreferrer"
-          className="block text-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-2xl">
+          className="block text-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl">
           Solicitar visita pelo WhatsApp
         </a>
 
-        <section className="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+        <section className="bg-white rounded-xl border border-slate-200 p-5 space-y-3">
           <h2 className="font-bold text-sm text-slate-900">Serviços realizados ({history.length})</h2>
           {history.length === 0 ? (
             <p className="text-xs text-slate-500">Nenhum serviço registrado para este aparelho ainda.</p>

@@ -100,7 +100,7 @@ function Authed({ session }) {
   if (!me || !me.active) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="bg-white border border-slate-200 rounded-2xl max-w-md w-full p-8 text-center space-y-4 shadow-sm">
+        <div className="bg-white border border-slate-200 rounded-xl max-w-md w-full p-8 text-center space-y-4 shadow-sm">
           <h1 className="text-lg font-bold text-slate-900">Acesso aguardando liberação</h1>
           <p className="text-sm text-slate-500">
             O usuário {session.user.email} ainda não foi liberado. Peça ao administrador para ativar o seu acesso.

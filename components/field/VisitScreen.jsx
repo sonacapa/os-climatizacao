@@ -74,7 +74,7 @@ export default function VisitScreen({ osId, onBack, onItem }) {
           const eq = getEq(it.equipment_id);
           if (!eq) return null;
           return (
-            <button key={it.id} onClick={() => startItem(it)} className="w-full text-left bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex items-center gap-3 active:bg-slate-50">
+            <button key={it.id} onClick={() => startItem(it)} className="w-full text-left bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex items-center gap-3 active:bg-slate-50">
               <div className="min-w-0 flex-1">
                 <p className="font-bold text-slate-900 truncate">{eq.location_tag || eq.code}</p>
                 <p className="text-xs text-slate-500 truncate">{eqTitle(eq)}{eqSpecs(eq) ? ` · ${eqSpecs(eq)}` : ''}</p>

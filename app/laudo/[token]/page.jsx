@@ -26,7 +26,7 @@ export default async function LaudoPage({ params }) {
     <main className="min-h-screen bg-slate-100 py-4 sm:py-8">
       <div className="max-w-3xl mx-auto px-3">
         <div className="no-print flex justify-end mb-3"><PrintButton /></div>
-        <div className="print-area bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-8">
+        <div className="print-area bg-white rounded-xl shadow-sm border border-slate-200 p-5 sm:p-8">
           <LaudoView d={d} />
         </div>
         <p className="no-print text-center text-xs text-slate-400 mt-4">Documento gerado por {d.company.name}</p>

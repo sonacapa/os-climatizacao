@@ -31,7 +31,7 @@ export default async function VisitPage({ params }) {
         </div>
         <div className="print-area space-y-4">
           {d.laudos.map((l, i) => (
-            <div key={i} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sm:p-8 break-after-page last:break-after-auto">
+            <div key={i} className="bg-white rounded-xl shadow-sm border border-slate-200 p-5 sm:p-8 break-after-page last:break-after-auto">
               <LaudoView d={l} />
             </div>
           ))}

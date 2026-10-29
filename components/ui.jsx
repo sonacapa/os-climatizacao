@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase';
 import { ITEM_STATUS, STATUS, logoUrl } from '@/lib/utils';
 
 export const inputCls =
-  'w-full min-h-[46px] border border-slate-300 rounded-xl px-3.5 py-2.5 bg-white text-slate-900 placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-100 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500';
+  'w-full min-h-[46px] border border-slate-300 rounded-lg px-3.5 py-2.5 bg-white text-ink placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500';
 
 export function Field({ label, hint, children, className = '' }) {
   return (
@@ -20,6 +20,8 @@ export function Field({ label, hint, children, className = '' }) {
 const VARIANTS = {
   primary: 'bg-brand-600 text-white hover:bg-brand-700 disabled:bg-brand-300',
   success: 'bg-emerald-600 text-white hover:bg-emerald-700 disabled:bg-emerald-300',
+  heat: 'bg-heat-500 text-white hover:bg-heat-600 disabled:opacity-50',
+  ink: 'bg-ink text-white hover:bg-slate-800 disabled:opacity-50',
   secondary: 'bg-white text-slate-800 border border-slate-300 hover:bg-slate-50 disabled:text-slate-400',
   soft: 'bg-brand-50 text-brand-800 hover:bg-brand-100 disabled:opacity-50',
   danger: 'bg-rose-600 text-white hover:bg-rose-700 disabled:bg-rose-300',
@@ -35,7 +37,7 @@ export function Btn({ variant = 'primary', size = 'md', icon: Icon, loading, cla
       type="button"
       {...props}
       disabled={props.disabled || loading}
-      className={`inline-flex items-center justify-center font-semibold rounded-xl transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-semibold rounded-lg transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : Icon ? <Icon className="w-4 h-4 shrink-0" /> : null}
       {children}
@@ -73,7 +75,7 @@ export function Modal({ title, subtitle, onClose, children, footer, maxWidth = '
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-slate-950/60 flex items-end sm:items-center justify-center sm:p-4"
+      className="fixed inset-0 z-50 bg-ink/60 flex items-end sm:items-center justify-center sm:p-4"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
       <div
@@ -81,11 +83,11 @@ export function Modal({ title, subtitle, onClose, children, footer, maxWidth = '
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`sheet-in bg-white w-full ${maxWidth} rounded-t-3xl sm:rounded-2xl shadow-2xl flex flex-col max-h-[92dvh] sm:max-h-[88vh] ${printArea ? 'print-area' : ''}`}
+        className={`sheet-in bg-white w-full ${maxWidth} rounded-t-2xl sm:rounded-xl shadow-lift flex flex-col max-h-[92dvh] sm:max-h-[88vh] ${printArea ? 'print-area' : ''}`}
       >
         <div className="flex items-start justify-between gap-3 px-5 pt-5 pb-3 no-print">
           <div className="min-w-0">
-            <h3 className="text-lg font-bold text-slate-900 leading-tight">{title}</h3>
+            <h3 className="text-xl font-bold text-ink leading-tight">{title}</h3>
             {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
           </div>
           <IconBtn icon={X} label="Fechar" onClick={onClose} className="-mr-2 -mt-1" />
@@ -99,11 +101,15 @@ export function Modal({ title, subtitle, onClose, children, footer, maxWidth = '
 
 export function StatusBadge({ status, className = '' }) {
   const s = STATUS[status] || STATUS.agendada;
-  return <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${s.cls} ${className}`}>{s.label}</span>;
+  return (
+    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 rounded-md px-2 py-1 whitespace-nowrap ${className}`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${s.dot || 'bg-slate-400'}`} />{s.label}
+    </span>
+  );
 }
 export function ItemBadge({ status }) {
   const s = ITEM_STATUS[status] || ITEM_STATUS.pendente;
-  return <span className={`text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${s.cls}`}>{s.label}</span>;
+  return <span className={`text-xs font-semibold px-2 py-0.5 rounded-md whitespace-nowrap ${s.cls}`}>{s.label}</span>;
 }
 
 export function Chip({ children, tone = 'slate', className = '' }) {
@@ -114,12 +120,12 @@ export function Chip({ children, tone = 'slate', className = '' }) {
     red: 'bg-rose-100 text-rose-800',
     sky: 'bg-brand-100 text-brand-800'
   };
-  return <span className={`text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap ${tones[tone]} ${className}`}>{children}</span>;
+  return <span className={`text-xs font-semibold px-2 py-0.5 rounded-md whitespace-nowrap ${tones[tone]} ${className}`}>{children}</span>;
 }
 
 export function Card({ children, className = '', ...props }) {
   return (
-    <div {...props} className={`bg-white rounded-2xl border border-slate-200/80 shadow-card ${className}`}>
+    <div {...props} className={`bg-white rounded-xl border border-slate-200 ${className}`}>
       {children}
     </div>
   );
@@ -154,7 +160,7 @@ export function SearchBox({ value, onChange, placeholder, className = '' }) {
 
 export function Segmented({ value, onChange, options, className = '' }) {
   return (
-    <div className={`inline-flex bg-slate-100 rounded-xl p-1 gap-1 ${className}`} role="tablist">
+    <div className={`inline-flex bg-slate-200/70 rounded-lg p-1 gap-1 ${className}`} role="tablist">
       {options.map((o) => (
         <button
           key={o.value}
@@ -162,8 +168,8 @@ export function Segmented({ value, onChange, options, className = '' }) {
           role="tab"
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`px-3.5 py-1.5 rounded-lg text-sm font-semibold transition-colors flex-1 whitespace-nowrap ${
-            value === o.value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'
+          className={`px-3.5 py-2 rounded-md text-sm font-semibold transition-colors flex-1 whitespace-nowrap ${
+            value === o.value ? 'bg-white text-ink shadow-card ring-1 ring-slate-200' : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           {o.label}
@@ -179,10 +185,10 @@ export function Logo({ company, size = 'md', dark = false }) {
   const box = size === 'lg' ? 'w-16 h-16' : size === 'sm' ? 'w-8 h-8' : 'w-10 h-10';
   if (url) {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={url} alt="" className={`${box} object-contain rounded-lg bg-white shrink-0`} />;
+    return <img src={url} alt="" className={`${box} object-contain rounded-lg bg-white shrink-0 ring-1 ring-slate-200`} />;
   }
   return (
-    <div className={`${box} rounded-xl bg-brand-600 text-white flex items-center justify-center shrink-0`}>
+    <div className={`${box} rounded-lg bg-ink text-white flex items-center justify-center shrink-0`}>
       <Wind className={size === 'lg' ? 'w-8 h-8' : size === 'sm' ? 'w-4 h-4' : 'w-5 h-5'} />
     </div>
   );

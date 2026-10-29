@@ -7,16 +7,21 @@ import { Btn, Field, Logo, inputCls } from './ui';
 
 function Shell({ company, title, subtitle, children }) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-brand-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
-        <div className="flex flex-col items-center text-center mb-6">
+    <div className="min-h-screen bg-paper flex flex-col">
+      <div className="bg-ink text-white px-6 pt-10 pb-14 sm:pb-16">
+        <div className="max-w-sm mx-auto flex items-center gap-3">
           <Logo company={company} size="lg" />
-          <p className="mt-3 font-bold text-slate-900">{company?.name || 'Ordens de Serviço'}</p>
+          <div className="min-w-0">
+            <p className="font-display text-2xl font-bold leading-tight">{company?.name || 'Ordens de Serviço'}</p>
+            <p className="text-sm text-slate-300 mt-0.5">Ordens de serviço e laudos</p>
+          </div>
         </div>
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 space-y-4">
+      </div>
+      <div className="px-4 -mt-8 pb-10 flex-1">
+        <div className="max-w-sm mx-auto bg-white rounded-xl border border-slate-200 shadow-lift p-6 space-y-4">
           <div>
-            <h1 className="text-xl font-bold text-slate-900">{title}</h1>
-            {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
+            <h1 className="text-2xl font-bold text-ink">{title}</h1>
+            {subtitle && <p className="text-sm text-slate-600 mt-1">{subtitle}</p>}
           </div>
           {children}
         </div>
