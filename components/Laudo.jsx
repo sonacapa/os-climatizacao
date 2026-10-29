@@ -1,5 +1,15 @@
 import { fmtDate, addDaysISO } from '@/lib/utils';
 
+// soma meses mantendo o dia (31/10 + 4 meses = 28/02), igual ao cálculo do banco
+function addMonths(iso, n) {
+  const [y, m, d] = iso.split('-').map(Number);
+  const total = m - 1 + n;
+  const ny = y + Math.floor(total / 12);
+  const nm = (total % 12) + 1;
+  const last = new Date(ny, nm, 0).getDate();
+  return `${ny}-${String(nm).padStart(2, '0')}-${String(Math.min(d, last)).padStart(2, '0')}`;
+}
+
 const RESULT = { ok: 'Conforme', attention: 'Atenção', na: 'N/A', pending: '—' };
 const spDate = (ts) => (ts ? new Date(ts).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' }) : null);
 
@@ -9,11 +19,7 @@ export default function LaudoView({ d }) {
   const done = spDate(item.completed_at);
   const wDays = Number(item.warranty_days) || 0;
   const warrantyUntil = done && wDays > 0 ? addDaysISO(done, wDays) : null;
-  const nextPrev = done && Number(item.preventive_months) > 0 ? (() => {
-    const dt = new Date(`${done}T12:00:00`);
-    dt.setMonth(dt.getMonth() + Number(item.preventive_months));
-    return dt.toLocaleDateString('en-CA');
-  })() : null;
+  const nextPrev = done && Number(item.preventive_months) > 0 ? addMonths(done, Number(item.preventive_months)) : null;
 
   return (
     <article className="bg-white text-slate-900 text-[13px] leading-snug">
