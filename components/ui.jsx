@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Loader2, Search, Wind, X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { ITEM_STATUS, STATUS, logoUrl } from '@/lib/utils';
+import { blobGet } from '@/lib/offline';
 
 export const inputCls =
   'w-full min-h-[46px] border border-slate-300 rounded-lg px-3.5 py-2.5 bg-white text-ink placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500';
@@ -200,9 +201,20 @@ export function StorageImage({ bucket, path, alt, className = '' }) {
     let alive = true;
     setUrl(null);
     if (!path) return undefined;
-    supabase.storage.from(bucket).createSignedUrl(path, 3600).then(({ data }) => alive && setUrl(data?.signedUrl || null));
+    let local = null;
+    // foto tirada sem internet: ainda está no aparelho, mostra dela
+    blobGet(path).then((blob) => {
+      if (!alive) return;
+      if (blob) {
+        local = URL.createObjectURL(blob);
+        setUrl(local);
+      } else {
+        supabase.storage.from(bucket).createSignedUrl(path, 3600).then(({ data }) => alive && setUrl(data?.signedUrl || null)).catch(() => {});
+      }
+    });
     return () => {
       alive = false;
+      if (local) URL.revokeObjectURL(local);
     };
   }, [bucket, path]);
   if (!path) return null;

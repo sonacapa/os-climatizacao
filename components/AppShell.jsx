@@ -4,6 +4,8 @@ import { CheckCircle2, AlertCircle } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAppData } from '@/hooks/useAppData';
 import { friendlyError } from '@/lib/utils';
+import { cachedSession, isOffline } from '@/lib/offline';
+import SyncPill from './SyncPill';
 import { AppCtx } from './AppContext';
 import { Btn, FullLoading, Modal } from './ui';
 import Login, { SetPassword } from './Login';
@@ -16,10 +18,10 @@ export default function AppShell() {
   const [recovery, setRecovery] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    supabase.auth.getSession().then(({ data }) => setSession(data.session || (isOffline() ? cachedSession() : null)));
     const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
       if (event === 'PASSWORD_RECOVERY') setRecovery(true);
-      setSession(s);
+      setSession(s || (event === 'SIGNED_OUT' || !isOffline() ? s : cachedSession()));
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -31,7 +33,7 @@ export default function AppShell() {
 }
 
 function Authed({ session }) {
-  const app = useAppData(true);
+  const app = useAppData(true, session.user.id);
   const appRef = useRef(app);
   appRef.current = app;
   const [toasts, setToasts] = useState([]);
@@ -97,6 +99,17 @@ function Authed({ session }) {
 
   if (app.loading || (me && me.active && !mode)) return <FullLoading />;
 
+  if (!me && isOffline()) {
+    return (
+      <div className="min-h-screen bg-paper flex items-center justify-center p-4">
+        <div className="bg-white border border-slate-200 rounded-xl max-w-md w-full p-8 text-center space-y-4">
+          <h1 className="text-lg font-bold text-ink">Sem internet</h1>
+          <p className="text-sm text-slate-600">Ainda não há dados guardados neste aparelho. Conecte-se à internet e abra o aplicativo uma vez para poder usá-lo sem sinal depois.</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!me || !me.active) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
@@ -124,6 +137,7 @@ function Authed({ session }) {
       {app.error && <p role="alert" className="bg-rose-100 text-rose-800 text-sm px-4 py-2 no-print">Não foi possível carregar tudo: {app.error}</p>}
       {mode === 'field' ? <FieldApp /> : <OfficeApp />}
       <ModalHost modals={modals} />
+      <SyncPill reload={app.reload} toast={toast} />
 
       {confirmState && (
         <Modal title={confirmState.title} onClose={() => answer(false)} maxWidth="max-w-sm"

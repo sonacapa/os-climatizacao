@@ -29,7 +29,7 @@ export default async function LaudoPage({ params }) {
         <div className="print-area bg-white rounded-xl shadow-sm border border-slate-200 p-5 sm:p-8">
           <LaudoView d={d} />
         </div>
-        <p className="no-print text-center text-xs text-slate-400 mt-4">Documento gerado por {d.company.name}</p>
+        <p className="no-print text-center text-xs text-slate-400 mt-4">Documento gerado por {d.company.name} · <a href="/privacidade" className="underline">Privacidade</a></p>
       </div>
     </main>
   );

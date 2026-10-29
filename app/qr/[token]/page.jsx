@@ -97,6 +97,7 @@ export default async function PublicEquipmentPage({ params }) {
           )}
         </section>
       </div>
+          <p className="no-print text-center text-xs text-slate-400 pb-6"><a href="/privacidade" className="underline">Política de privacidade</a></p>
     </main>
   );
 }

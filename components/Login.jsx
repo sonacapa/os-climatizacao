@@ -24,6 +24,7 @@ function Shell({ company, title, subtitle, children }) {
             {subtitle && <p className="text-sm text-slate-600 mt-1">{subtitle}</p>}
           </div>
           {children}
+          <a href="/privacidade" className="block text-center text-xs text-slate-500 underline underline-offset-2 pt-2">Política de privacidade</a>
         </div>
       </div>
     </div>

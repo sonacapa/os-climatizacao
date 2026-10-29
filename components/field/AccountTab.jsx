@@ -2,6 +2,7 @@
 import { LogOut, UserCog } from 'lucide-react';
 import { useApp } from '../AppContext';
 import { Btn, Card } from '../ui';
+import InstallCard from '../InstallCard';
 
 export default function AccountTab() {
   const { me, openModal, signOut, data } = useApp();
@@ -15,7 +16,9 @@ export default function AccountTab() {
           <p className="text-xs text-slate-400">{data.company?.name}</p>
         </div>
       </Card>
+      <InstallCard />
       <Btn variant="secondary" size="lg" icon={UserCog} className="w-full" onClick={() => openModal('account')}>Meus dados e senha</Btn>
+      <a href="/privacidade" target="_blank" rel="noreferrer" className="block text-center text-sm text-slate-500 underline underline-offset-2">Política de privacidade</a>
       <Btn variant="dangerSoft" size="lg" icon={LogOut} className="w-full" onClick={signOut}>Sair</Btn>
     </div>
   );

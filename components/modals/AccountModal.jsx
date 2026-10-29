@@ -4,6 +4,7 @@ import { LogOut } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useApp } from '../AppContext';
 import { Btn, Field, Modal, inputCls } from '../ui';
+import InstallCard from '../InstallCard';
 
 export default function AccountModal() {
   const { me, run, closeModal, signOut, toast } = useApp();
@@ -35,6 +36,7 @@ export default function AccountModal() {
 
   return (
     <Modal title="Minha conta" subtitle={me.email} onClose={closeModal}>
+      <div className="mb-3"><InstallCard /></div>
       <form onSubmit={saveProfile} className="space-y-3">
         <Field label="Nome"><input value={name} onChange={(e) => setName(e.target.value)} className={inputCls} /></Field>
         <Field label="Telefone"><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputCls} /></Field>

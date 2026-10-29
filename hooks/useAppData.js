@@ -1,16 +1,35 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { flush } from '@/lib/api';
+import { applyOp, isNetworkError, isOffline, loadSnapshot, onLocalOp, outboxCount, saveSnapshot } from '@/lib/offline';
 
 const EMPTY = { company: null, profiles: [], clients: [], equipment: [], catalog: [], orders: [] };
 
-export function useAppData(enabled) {
+export function useAppData(enabled, uid) {
   const [data, setData] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const timer = useRef(null);
+  const loaded = useRef(false);
+
+  // Abre com a última cópia guardada no aparelho (usada quando não há internet).
+  const fromSnapshot = useCallback(async () => {
+    const snap = await loadSnapshot(uid);
+    if (snap) {
+      loaded.current = true;
+      setData(snap);
+    }
+    setLoading(false);
+  }, [uid]);
 
   const reload = useCallback(async () => {
+    await flush().catch(() => {});
+    // sem internet, ou com alterações ainda na fila: mantém o que está na tela
+    if (isOffline() || (await outboxCount()) > 0) {
+      if (!loaded.current) await fromSnapshot();
+      return;
+    }
     const [company, profiles, clients, equipment, catalog, orders] = await Promise.all([
       supabase.from('company_settings').select('*').eq('id', 1).maybeSingle(),
       supabase.from('profiles').select('*').order('name'),
@@ -24,8 +43,13 @@ export function useAppData(enabled) {
         .order('scheduled_time', { ascending: false })
     ]);
     const failed = [company, profiles, clients, equipment, catalog, orders].find((r) => r.error);
+    if (failed && isNetworkError(failed.error)) {
+      if (!loaded.current) await fromSnapshot();
+      setLoading(false);
+      return;
+    }
     setError(failed ? failed.error.message : '');
-    setData({
+    const next = {
       company: company.data,
       profiles: profiles.data || [],
       clients: clients.data || [],
@@ -42,9 +66,12 @@ export function useAppData(enabled) {
         const { work_order_items, checklist_items, materials_used, ...rest } = o;
         return { ...rest, items };
       })
-    });
+    };
+    loaded.current = true;
+    setData(next);
     setLoading(false);
-  }, []);
+    if (!failed) saveSnapshot(uid, next);
+  }, [uid, fromSnapshot]);
 
   useEffect(() => {
     if (!enabled) return undefined;
@@ -60,8 +87,18 @@ export function useAppData(enabled) {
       .subscribe();
     const onVisible = () => document.visibilityState === 'visible' && reload();
     document.addEventListener('visibilitychange', onVisible);
+    window.addEventListener('online', reload);
+    // alterações feitas sem internet aparecem na tela na hora
+    const offLocal = onLocalOp((op) => setData((d) => applyOp(d, op)));
+    // tenta enviar a fila de tempos em tempos
+    const retry = setInterval(async () => {
+      if (!isOffline() && (await outboxCount()) > 0) reload();
+    }, 15000);
     return () => {
       clearTimeout(timer.current);
+      clearInterval(retry);
+      offLocal();
+      window.removeEventListener('online', reload);
       document.removeEventListener('visibilitychange', onVisible);
       supabase.removeChannel(channel);
     };

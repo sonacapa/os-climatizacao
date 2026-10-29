@@ -38,6 +38,7 @@ export default async function VisitPage({ params }) {
         </div>
         <p className="no-print text-center text-xs text-slate-400">Documentos gerados por {d.laudos[0].company.name}</p>
       </div>
+          <p className="no-print text-center text-xs text-slate-400 pb-6"><a href="/privacidade" className="underline">Política de privacidade</a></p>
     </main>
   );
 }
