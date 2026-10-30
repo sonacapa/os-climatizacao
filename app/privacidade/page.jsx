@@ -2,7 +2,7 @@ export const metadata = { title: 'Política de privacidade' };
 
 const Section = ({ title, children }) => (
   <section className="space-y-2">
-    <h2 className="text-lg font-bold text-ink">{title}</h2>
+    <h2 className="text-lg font-semibold text-ink">{title}</h2>
     <div className="space-y-2 text-slate-700 leading-relaxed">{children}</div>
   </section>
 );
@@ -12,7 +12,7 @@ export default function Privacidade() {
     <main className="min-h-screen bg-paper py-8">
       <article className="max-w-2xl mx-auto px-4 space-y-6">
         <header>
-          <h1 className="text-3xl font-bold text-ink">Política de privacidade</h1>
+          <h1 className="text-3xl font-semibold text-ink">Política de privacidade</h1>
           <p className="text-sm text-slate-500 mt-1">Atualizada em 29/10/2026</p>
         </header>
 

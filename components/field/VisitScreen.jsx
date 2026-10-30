@@ -69,14 +69,14 @@ export default function VisitScreen({ osId, onBack, onItem }) {
       </Card>
 
       <section className="space-y-2">
-        <h2 className="font-bold text-slate-900">Aparelhos ({done}/{os.items.length})</h2>
+        <h2 className="font-semibold text-slate-900">Aparelhos ({done}/{os.items.length})</h2>
         {os.items.map((it) => {
           const eq = getEq(it.equipment_id);
           if (!eq) return null;
           return (
             <button key={it.id} onClick={() => startItem(it)} className="w-full text-left bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex items-center gap-3 active:bg-slate-50">
               <div className="min-w-0 flex-1">
-                <p className="font-bold text-slate-900 truncate">{eq.location_tag || eq.code}</p>
+                <p className="font-semibold text-slate-900 truncate">{eq.location_tag || eq.code}</p>
                 <p className="text-xs text-slate-500 truncate">{eqTitle(eq)}{eqSpecs(eq) ? ` · ${eqSpecs(eq)}` : ''}</p>
                 <div className="mt-1.5"><ItemBadge status={it.status} /></div>
               </div>
@@ -94,7 +94,7 @@ export default function VisitScreen({ osId, onBack, onItem }) {
 
       {open && (
         <section className="space-y-2">
-          <h2 className="font-bold text-slate-900">Assinatura do cliente</h2>
+          <h2 className="font-semibold text-slate-900">Assinatura do cliente</h2>
           <Card className="p-4"><SignaturePad os={os} /></Card>
         </section>
       )}

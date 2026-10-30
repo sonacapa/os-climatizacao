@@ -24,7 +24,7 @@ export default function CatalogView() {
         <div className="space-y-4">
           {cats.map((cat) => (
             <section key={cat}>
-              <h3 className="text-xs font-bold uppercase tracking-wide text-slate-500 mb-1.5">{cat}</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">{cat}</h3>
               <Card className="divide-y divide-slate-100 overflow-hidden">
                 {list.filter((c) => c.category === cat).map((c) => (
                   <button key={c.id} onClick={() => openModal('catalog', { item: c })} className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-slate-50">

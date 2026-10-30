@@ -17,7 +17,7 @@ export default function MachinesTab() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-xl font-bold text-slate-900">Aparelhos dos seus clientes</h1>
+        <h1 className="text-xl font-semibold text-slate-900">Aparelhos dos seus clientes</h1>
         <p className="text-sm text-slate-500">Toque em um aparelho para ver o histórico e iniciar o atendimento.</p>
       </div>
       <SearchBox value={q} onChange={setQ} placeholder="Buscar por cliente, local ou código" />

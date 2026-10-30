@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { api } from '@/lib/api';
+import { geocode } from '@/lib/geo';
 import { useApp } from '../AppContext';
 import { Btn, Field, Modal, inputCls } from '../ui';
 
@@ -14,8 +15,14 @@ export default function ClientModal({ client, onSaved }) {
     e.preventDefault();
     if (!f.name.trim()) return toast('Informe o nome do cliente.', 'error');
     setBusy(true);
+    const address = f.address.trim();
+    let geo = {};
+    if (address && address !== client?.geo_address) {
+      const g = await geocode(address);
+      geo = g ? { lat: g.lat, lng: g.lng, geo_address: address } : { lat: null, lng: null, geo_address: null };
+    }
     const r = await run(
-      () => api.save('clients', { id: client?.id, name: f.name.trim(), document: f.document.trim(), phone: f.phone.trim(), address: f.address.trim(), contact_name: f.contact_name.trim() }),
+      () => api.save('clients', { id: client?.id, name: f.name.trim(), document: f.document.trim(), phone: f.phone.trim(), address, contact_name: f.contact_name.trim(), ...geo }),
       client ? 'Cliente atualizado' : 'Cliente cadastrado'
     );
     setBusy(false);

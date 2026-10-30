@@ -51,7 +51,7 @@ function GroupCard({ g }) {
     <Card className="p-4 space-y-3">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="font-bold text-slate-900 truncate">{client.name}</p>
+          <p className="font-semibold text-slate-900 truncate">{client.name}</p>
           <p className="text-xs text-slate-500 truncate">{client.address || client.phone || ''}</p>
         </div>
         <div className="flex flex-col items-end gap-1 shrink-0">

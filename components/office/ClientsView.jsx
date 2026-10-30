@@ -1,6 +1,8 @@
 'use client';
 import { useMemo, useState } from 'react';
 import { ArrowLeft, ClipboardList, History, MapPin, MessageCircle, Pencil, Phone, Plus, QrCode, UserPlus, Users } from 'lucide-react';
+import { api } from '@/lib/api';
+import { geocode } from '@/lib/geo';
 import { norm, waLink } from '@/lib/utils';
 import { useApp } from '../AppContext';
 import { MaintChip, PageHeader, WarrantyChip, eqSpecs, eqTitle } from '../shared';
@@ -9,7 +11,20 @@ import { Btn, Card, EmptyState, IconBtn, SearchBox } from '../ui';
 const machineText = (e) => norm(`${e.code} ${e.brand} ${e.model} ${e.location_tag} ${e.serial_number}`);
 
 export default function ClientsView() {
-  const { data, openModal } = useApp();
+  const { data, openModal, run, toast } = useApp();
+  const [geoBusy, setGeoBusy] = useState(false);
+  const pendingGeo = data.clients.filter((c) => c.address && (c.lat == null || c.geo_address !== c.address));
+  const locate = async () => {
+    setGeoBusy(true);
+    let ok = 0;
+    for (const c of pendingGeo) {
+      const g = await geocode(c.address);
+      if (g) { await run(() => api.save('clients', { id: c.id, name: c.name, lat: g.lat, lng: g.lng, geo_address: c.address })); ok++; }
+      await new Promise((r) => setTimeout(r, 1100));
+    }
+    setGeoBusy(false);
+    toast(`${ok} de ${pendingGeo.length} endereços localizados`);
+  };
   const [q, setQ] = useState('');
   const [selId, setSelId] = useState(null);
 
@@ -30,6 +45,7 @@ export default function ClientsView() {
   return (
     <div>
       <PageHeader title="Clientes e aparelhos" subtitle="Busque por nome, telefone, endereço, código ou local do aparelho.">
+        {pendingGeo.length > 0 && <Btn variant="secondary" icon={MapPin} loading={geoBusy} onClick={locate}>Localizar endereços ({pendingGeo.length})</Btn>}
         <Btn icon={UserPlus} onClick={() => openModal('client', { onSaved: (c) => setSelId(c.id) })}>Novo cliente</Btn>
       </PageHeader>
 
@@ -77,7 +93,7 @@ function ClientDetail({ client, onBack }) {
       <Card className="p-5 space-y-3">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <h2 className="text-xl font-bold text-slate-900">{client.name}</h2>
+            <h2 className="text-xl font-semibold text-slate-900">{client.name}</h2>
             {client.contact_name && <p className="text-sm text-slate-500">Contato: {client.contact_name}</p>}
           </div>
           <IconBtn icon={Pencil} label="Editar cliente" onClick={() => openModal('client', { client })} />
@@ -95,7 +111,7 @@ function ClientDetail({ client, onBack }) {
       </Card>
 
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="font-bold text-slate-900">Aparelhos ({machines.length})</h3>
+        <h3 className="font-semibold text-slate-900">Aparelhos ({machines.length})</h3>
         <div className="flex gap-2">
           {machines.length > 0 && <Btn variant="secondary" size="sm" icon={QrCode} onClick={() => openModal('qrLabels', { equipment: machines })}>Etiquetas QR</Btn>}
           <Btn size="sm" icon={Plus} onClick={() => openModal('equipment', { clientId: client.id })}>Novo aparelho</Btn>

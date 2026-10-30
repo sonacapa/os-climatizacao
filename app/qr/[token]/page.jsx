@@ -36,15 +36,15 @@ export default async function PublicEquipmentPage({ params }) {
           <div className="bg-brand-500 p-2 rounded-xl"><Wind className="w-5 h-5" /></div>
         )}
         <div>
-          <p className="text-sm font-bold leading-tight">{company.name}</p>
+          <p className="text-sm font-semibold leading-tight">{company.name}</p>
           <p className="text-xs text-slate-400">Histórico do equipamento</p>
         </div>
       </header>
 
       <div className="max-w-xl mx-auto p-4 space-y-4">
         <section className="bg-white rounded-xl border border-slate-200 p-5 space-y-3">
-          <span className="font-mono text-xs font-bold bg-slate-900 text-emerald-400 px-2.5 py-1 rounded-lg">{eq.code}</span>
-          <h1 className="text-lg font-bold text-slate-900">{eq.brand} {eq.model} · {eq.btus} BTUs</h1>
+          <span className="font-mono text-xs font-semibold bg-slate-900 text-emerald-400 px-2.5 py-1 rounded-lg">{eq.code}</span>
+          <h1 className="text-lg font-semibold text-slate-900">{eq.brand} {eq.model} · {eq.btus} BTUs</h1>
           <p className="text-sm text-slate-600">{eq.location} · Gás {eq.gas} · {eq.voltage}</p>
           <dl className="grid grid-cols-2 gap-3 text-xs pt-2 border-t border-slate-100">
             <div>
@@ -58,7 +58,7 @@ export default async function PublicEquipmentPage({ params }) {
             <div className="col-span-2">
               <dt className="text-slate-400">Garantia do serviço</dt>
               <dd>
-                <span className={`inline-block mt-0.5 px-2 py-0.5 rounded font-bold ${warranty ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'}`}>
+                <span className={`inline-block mt-0.5 px-2 py-0.5 rounded font-semibold ${warranty ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-700'}`}>
                   {warranty ? `Válida até ${fmtDate(eq.warranty_until)}` : 'Encerrada'}
                 </span>
               </dd>
@@ -67,12 +67,12 @@ export default async function PublicEquipmentPage({ params }) {
         </section>
 
         <a href={wa} target="_blank" rel="noreferrer"
-          className="block text-center bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl">
+          className="block text-center bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3.5 rounded-xl">
           Solicitar visita pelo WhatsApp
         </a>
 
         <section className="bg-white rounded-xl border border-slate-200 p-5 space-y-3">
-          <h2 className="font-bold text-sm text-slate-900">Serviços realizados ({history.length})</h2>
+          <h2 className="font-semibold text-sm text-slate-900">Serviços realizados ({history.length})</h2>
           {history.length === 0 ? (
             <p className="text-xs text-slate-500">Nenhum serviço registrado para este aparelho ainda.</p>
           ) : (
@@ -81,7 +81,7 @@ export default async function PublicEquipmentPage({ params }) {
                 <li key={i} className="space-y-1.5">
                   <p className="text-sm font-semibold text-slate-900">{fmtDate(h.date)} · {h.service}</p>
                   {h.warranty_days > 0 && <p className="text-xs text-slate-500">Garantia de {h.warranty_days} dias</p>}
-                  {h.token && <a href={`/laudo/${h.token}`} className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg">Ver laudo desta visita →</a>}
+                  {h.token && <a href={`/laudo/${h.token}`} className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700 bg-brand-50 px-3 py-1.5 rounded-lg">Ver laudo desta visita →</a>}
                   {h.materials.length > 0 && (
                     <div className="flex flex-wrap gap-1.5">
                       {h.materials.map((m, j) => (

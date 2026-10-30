@@ -17,13 +17,13 @@ export default function OsCard({ os, showDate }) {
       className="w-full min-w-0 text-left bg-white rounded-xl border border-slate-200 hover:border-brand-400 transition-colors p-4 flex gap-4"
     >
       <div className="w-14 shrink-0 text-center pt-0.5">
-        <p className="num text-2xl font-bold text-ink leading-none">{fmtTime(os.scheduled_time) || '--:--'}</p>
+        <p className="num text-xl font-semibold text-ink leading-none">{fmtTime(os.scheduled_time) || '--:--'}</p>
         {showDate && <p className="text-[11px] font-semibold text-slate-500 mt-1 leading-tight">{showDate}</p>}
       </div>
       <div className="min-w-0 flex-1 space-y-1.5 border-l border-slate-200 pl-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="font-bold text-ink leading-snug">{client?.name}</p>
+            <p className="font-semibold text-ink leading-snug">{client?.name}</p>
             <p className="text-xs text-slate-500">{osLabel(os)} · {os.service_type}</p>
           </div>
           <StatusBadge status={os.status} />

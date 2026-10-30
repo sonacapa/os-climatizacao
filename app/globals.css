@@ -4,12 +4,13 @@
 
 html { -webkit-text-size-adjust: 100%; }
 body { @apply bg-paper text-ink antialiased; }
-h1, h2, h3 { font-family: var(--font-display), var(--font-body), system-ui, sans-serif; letter-spacing: -0.015em; }
+h1, h2, h3 { font-weight: 600; font-family: var(--font-display), var(--font-body), system-ui, sans-serif; letter-spacing: -0.015em; }
 .num { font-family: var(--font-display), system-ui, sans-serif; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 input, select, textarea { font-size: 16px; } /* evita zoom automático no iPhone */
 @media (min-width: 768px) { input, select, textarea { font-size: 14px; } }
+.lucide { stroke-width: 1.75; }
 :focus-visible { outline: 2px solid #2a49c6; outline-offset: 2px; }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
 .modal-foot { padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); }

@@ -1,21 +1,23 @@
 'use client';
 import { useState } from 'react';
-import { CalendarX, MapPin, Navigation, Phone } from 'lucide-react';
+import { CalendarX, MapPin, Navigation, Phone, Route } from 'lucide-react';
 import { api } from '@/lib/api';
 import { OPEN, STATUS, addDaysISO, fmtDate, fmtTime, mapsLink, norm, osLabel, relDay, todayISO } from '@/lib/utils';
 import { useApp } from '../AppContext';
-import { Btn, EmptyState, Segmented, SearchBox, StatusBadge, inputCls } from '../ui';
+import { savedRoute } from './RouteModal';
+import { Btn, EmptyState, Segmented, SearchBox, StatusBadge, pillCls } from '../ui';
 
 const greeting = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; };
 
 export default function JobsTab() {
-  const { data, me, setScreen } = useApp();
+  const { data, me, setScreen, openModal } = useApp();
   const [view, setView] = useState('hoje');
+  const [order, setOrder] = useState(() => (typeof window === 'undefined' ? null : savedRoute()));
   const today = todayISO();
   const mine = data.orders.filter((o) => o.tech_id === me.id);
   const open = mine.filter((o) => OPEN.includes(o.status)).sort((a, b) => `${a.scheduled_date} ${a.scheduled_time}`.localeCompare(`${b.scheduled_date} ${b.scheduled_time}`));
   const lists = {
-    hoje: open.filter((o) => o.scheduled_date <= today),
+    hoje: open.filter((o) => o.scheduled_date <= today).sort((a, b) => { if (!order) return 0; const i = order.indexOf(a.id), j = order.indexOf(b.id); return (i < 0 ? 99 : i) - (j < 0 ? 99 : j); }),
     proximos: open.filter((o) => o.scheduled_date > today),
     feitos: mine.filter((o) => !OPEN.includes(o.status))
   };
@@ -25,7 +27,7 @@ export default function JobsTab() {
   return (
     <div className="space-y-4">
       <div className="pt-1">
-        <h1 className="text-[1.65rem] leading-tight font-bold text-ink">{greeting()}, {me.name.split(' ')[0]}</h1>
+        <h1 className="text-[1.65rem] leading-tight font-semibold text-ink">{greeting()}, {me.name.split(' ')[0]}</h1>
         <p className="text-sm text-slate-600 mt-0.5">{n === 0 ? 'Nenhum chamado para hoje.' : n === 1 ? '1 chamado para hoje.' : `${n} chamados para hoje.`}</p>
       </div>
       <Segmented className="w-full" value={view} onChange={setView} options={[
@@ -33,6 +35,11 @@ export default function JobsTab() {
         { value: 'proximos', label: 'Próximos', count: lists.proximos.length },
         { value: 'feitos', label: 'Histórico' }
       ]} />
+      {view === 'hoje' && n >= 2 && (
+        <button onClick={() => openModal('route', { osIds: lists.hoje.map((o) => o.id), onApply: setOrder })} className="w-full flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left">
+          <Route className="w-5 h-5 text-brand-600" /><span className="flex-1"><span className="block text-sm font-medium text-ink">Rota do dia</span><span className="block text-xs text-slate-500">Ver a melhor ordem para {n} visitas</span></span>
+        </button>
+      )}
       {view === 'feitos' ? <History list={list} /> : list.length === 0 ? (
         <EmptyState icon={CalendarX} title={view === 'hoje' ? 'Nenhum chamado para hoje' : view === 'proximos' ? 'Nenhum chamado futuro' : 'Nada por aqui ainda'}
           text={view === 'hoje' ? 'Quando o escritório agendar uma visita para você, ela aparece aqui. Para atender um aparelho agora, use “Ler QR”.' : undefined} />
@@ -67,7 +74,7 @@ function JobCard({ os, onOpen, hero = false }) {
       <div role="button" tabIndex={0} onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()} className="p-4 space-y-3 cursor-pointer">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className={`num font-bold leading-none ${dark ? 'text-5xl' : 'text-3xl'} ${late ? (dark ? 'text-heat-400' : 'text-rose-600') : ''}`}>{fmtTime(os.scheduled_time) || '--:--'}</p>
+            <p className={`num font-semibold leading-none ${dark ? 'text-4xl' : 'text-2xl'} ${late ? (dark ? 'text-heat-400' : 'text-rose-600') : ''}`}>{fmtTime(os.scheduled_time) || '--:--'}</p>
             <p className={`text-xs font-semibold mt-1.5 ${late ? (dark ? 'text-heat-400' : 'text-rose-600') : sub}`}>
               {closed ? fmtDate(os.scheduled_date) : relDay(os.scheduled_date)}{late ? ' · atrasado' : ''}
             </p>
@@ -77,7 +84,7 @@ function JobCard({ os, onOpen, hero = false }) {
           ) : <StatusBadge status={os.status} />}
         </div>
         <div>
-          <p className="font-display text-xl font-bold leading-tight">{client?.name}</p>
+          <p className="font-display text-lg font-semibold leading-tight">{client?.name}</p>
           <p className={`text-xs mt-0.5 ${sub}`}>{osLabel(os)} · {os.service_type} · {os.items.length} {os.items.length === 1 ? 'aparelho' : 'aparelhos'}{done > 0 ? ` (${done} feito${done > 1 ? 's' : ''})` : ''}</p>
         </div>
         {client?.address && <p className={`text-sm flex gap-1.5 ${sub}`}><MapPin className="w-4 h-4 opacity-70 mt-0.5 shrink-0" /> {client.address}</p>}
@@ -115,11 +122,11 @@ function History({ list }) {
   return (
     <div className="space-y-3">
       <SearchBox value={q} onChange={(v) => { setQ(v); setLimit(20); }} placeholder="Buscar por cliente, endereço, local ou nº da O.S." />
-      <div className="grid grid-cols-2 gap-2">
-        <select value={period} onChange={(e) => { setPeriod(e.target.value); setLimit(20); }} className={inputCls} aria-label="Período">
+      <div className="flex gap-2">
+        <select value={period} onChange={(e) => { setPeriod(e.target.value); setLimit(20); }} className={pillCls} aria-label="Período">
           {PERIODS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
         </select>
-        <select value={status} onChange={(e) => { setStatus(e.target.value); setLimit(20); }} className={inputCls} aria-label="Situação">
+        <select value={status} onChange={(e) => { setStatus(e.target.value); setLimit(20); }} className={pillCls} aria-label="Situação">
           <option value="todas">Todas</option>
           <option value="finalizada">Concluídas</option>
           <option value="cancelada">Canceladas</option>

@@ -4,7 +4,8 @@ import { ClipboardList, Plus } from 'lucide-react';
 import { OPEN, addDaysISO, norm, osLabel, relDay, todayISO } from '@/lib/utils';
 import { useApp } from '../AppContext';
 import { PageHeader } from '../shared';
-import { Btn, EmptyState, SearchBox, Segmented, inputCls } from '../ui';
+import { Btn, EmptyState, SearchBox, Segmented, pillCls } from '../ui';
+import AgendaView from './AgendaView';
 import OsCard from './OsCard';
 
 export default function OrdersView({ filter, setFilter }) {
@@ -12,6 +13,7 @@ export default function OrdersView({ filter, setFilter }) {
   const [q, setQ] = useState('');
   const [period, setPeriod] = useState('0');
   const [techId, setTechId] = useState('');
+  const [view, setView] = useState('lista');
   const today = todayISO();
 
   const counts = useMemo(() => ({
@@ -49,6 +51,8 @@ export default function OrdersView({ filter, setFilter }) {
         <Btn icon={Plus} onClick={() => openModal('os')}>Nova O.S.</Btn>
       </PageHeader>
 
+      <div className="mb-4"><Segmented value={view} onChange={setView} options={[{ value: 'lista', label: 'Lista' }, { value: 'agenda', label: 'Agenda' }]} /></div>
+      {view === 'agenda' ? <AgendaView /> : (<>
       <div className="space-y-3 mb-4">
         <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
           <Segmented value={filter} onChange={setFilter} options={[
@@ -61,11 +65,11 @@ export default function OrdersView({ filter, setFilter }) {
         </div>
         <SearchBox value={q} onChange={setQ} placeholder="Buscar por cliente, técnico, nº da O.S. ou local do aparelho" />
         <div className="grid grid-cols-2 gap-2 sm:max-w-md">
-          <select value={techId} onChange={(e) => setTechId(e.target.value)} className={inputCls} aria-label="Técnico">
+          <select value={techId} onChange={(e) => setTechId(e.target.value)} className={pillCls} aria-label="Técnico">
             <option value="">Todos os técnicos</option>
             {data.profiles.filter((p) => p.role === 'tech' || p.does_field).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
-          <select value={period} onChange={(e) => setPeriod(e.target.value)} className={inputCls} aria-label="Período" disabled={['abertas', 'hoje'].includes(filter)}>
+          <select value={period} onChange={(e) => setPeriod(e.target.value)} className={pillCls} aria-label="Período" disabled={['abertas', 'hoje'].includes(filter)}>
             <option value="0">Todo o período</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="90">Últimos 90 dias</option>
           </select>
         </div>
@@ -81,13 +85,14 @@ export default function OrdersView({ filter, setFilter }) {
             lastDate = o.scheduled_date;
             return (
               <div key={o.id}>
-                {head && <h3 className="text-xs font-bold uppercase tracking-wide text-slate-500 mt-4 mb-1.5 first:mt-0">{relDay(o.scheduled_date)}</h3>}
+                {head && <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500 mt-4 mb-1.5 first:mt-0">{relDay(o.scheduled_date)}</h3>}
                 <OsCard os={o} />
               </div>
             );
           })}
         </div>
       )}
+      </>)}
     </div>
   );
 }

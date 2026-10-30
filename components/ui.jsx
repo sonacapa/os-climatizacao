@@ -8,10 +8,13 @@ import { blobGet } from '@/lib/offline';
 export const inputCls =
   'w-full min-h-[46px] border border-slate-300 rounded-lg px-3.5 py-2.5 bg-white text-ink placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500';
 
+export const pillCls =
+  'min-h-[38px] rounded-full border border-slate-300 bg-white pl-3.5 pr-8 py-1.5 text-sm text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none';
+
 export function Field({ label, hint, children, className = '' }) {
   return (
     <label className={`block ${className}`}>
-      <span className="text-sm font-medium text-slate-700 block mb-1">{label}</span>
+      <span className="text-sm text-slate-600 block mb-1">{label}</span>
       {children}
       {hint && <span className="text-xs text-slate-500 block mt-1">{hint}</span>}
     </label>
@@ -30,7 +33,7 @@ const VARIANTS = {
   whatsapp: 'bg-[#25D366] text-white hover:bg-[#1fbd5b] disabled:opacity-50',
   ghost: 'text-slate-600 hover:bg-slate-100 disabled:opacity-50'
 };
-const SIZES = { sm: 'px-3 py-2 text-sm gap-1.5 min-h-[38px]', md: 'px-4 py-2.5 text-sm gap-2 min-h-[44px]', lg: 'px-5 py-3.5 text-base gap-2 min-h-[52px]' };
+const SIZES = { sm: 'px-3 py-2 text-sm gap-1.5 min-h-[38px]', md: 'px-4 py-2.5 text-sm gap-2 min-h-[44px]', lg: 'px-5 py-3 text-[15px] gap-2 min-h-[48px]' };
 
 export function Btn({ variant = 'primary', size = 'md', icon: Icon, loading, className = '', children, ...props }) {
   return (
@@ -38,7 +41,7 @@ export function Btn({ variant = 'primary', size = 'md', icon: Icon, loading, cla
       type="button"
       {...props}
       disabled={props.disabled || loading}
-      className={`inline-flex items-center justify-center font-semibold rounded-lg transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-medium rounded-lg transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : Icon ? <Icon className="w-4 h-4 shrink-0" /> : null}
       {children}
@@ -88,7 +91,7 @@ export function Modal({ title, subtitle, onClose, children, footer, maxWidth = '
       >
         <div className="flex items-start justify-between gap-3 px-5 pt-5 pb-3 no-print">
           <div className="min-w-0">
-            <h3 className="text-xl font-bold text-ink leading-tight">{title}</h3>
+            <h3 className="text-xl font-semibold text-ink leading-tight">{title}</h3>
             {subtitle && <p className="text-sm text-slate-500 mt-0.5">{subtitle}</p>}
           </div>
           <IconBtn icon={X} label="Fechar" onClick={onClose} className="-mr-2 -mt-1" />
@@ -103,14 +106,14 @@ export function Modal({ title, subtitle, onClose, children, footer, maxWidth = '
 export function StatusBadge({ status, className = '' }) {
   const s = STATUS[status] || STATUS.agendada;
   return (
-    <span className={`inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 rounded-md px-2 py-1 whitespace-nowrap ${className}`}>
+    <span className={`inline-flex items-center gap-1.5 text-xs font-medium text-slate-700 bg-slate-100 rounded-full px-2.5 py-1 whitespace-nowrap ${className}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${s.dot || 'bg-slate-400'}`} />{s.label}
     </span>
   );
 }
 export function ItemBadge({ status }) {
   const s = ITEM_STATUS[status] || ITEM_STATUS.pendente;
-  return <span className={`text-xs font-semibold px-2 py-0.5 rounded-md whitespace-nowrap ${s.cls}`}>{s.label}</span>;
+  return <span className={`text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${s.cls}`}>{s.label}</span>;
 }
 
 export function Chip({ children, tone = 'slate', className = '' }) {
@@ -121,7 +124,7 @@ export function Chip({ children, tone = 'slate', className = '' }) {
     red: 'bg-rose-100 text-rose-800',
     sky: 'bg-brand-100 text-brand-800'
   };
-  return <span className={`text-xs font-semibold px-2 py-0.5 rounded-md whitespace-nowrap ${tones[tone]} ${className}`}>{children}</span>;
+  return <span className={`text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${tones[tone]} ${className}`}>{children}</span>;
 }
 
 export function Card({ children, className = '', ...props }) {
@@ -161,7 +164,7 @@ export function SearchBox({ value, onChange, placeholder, className = '' }) {
 
 export function Segmented({ value, onChange, options, className = '' }) {
   return (
-    <div className={`inline-flex bg-slate-200/70 rounded-lg p-1 gap-1 ${className}`} role="tablist">
+    <div className={`inline-flex bg-slate-200/60 rounded-full p-1 gap-0.5 ${className}`} role="tablist">
       {options.map((o) => (
         <button
           key={o.value}
@@ -169,8 +172,8 @@ export function Segmented({ value, onChange, options, className = '' }) {
           role="tab"
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`px-3.5 py-2 rounded-md text-sm font-semibold transition-colors flex-1 whitespace-nowrap ${
-            value === o.value ? 'bg-white text-ink shadow-card ring-1 ring-slate-200' : 'text-slate-500 hover:text-slate-800'
+          className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors flex-1 whitespace-nowrap ${
+            value === o.value ? 'bg-white text-ink shadow-card' : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           {o.label}

@@ -21,7 +21,7 @@ export default function QrLabelsModal({ equipment }) {
         {list.map((eq) => (
           <div key={eq.id} className="border-2 border-slate-800 rounded-xl p-3 text-center break-inside-avoid">
             <QRCodeSVG value={qrUrl(eq)} size={128} level="M" className="mx-auto w-full max-w-[128px] h-auto" />
-            <p className="font-mono font-bold text-sm mt-2">{eq.code}</p>
+            <p className="font-mono font-semibold text-sm mt-2">{eq.code}</p>
             {eq.location_tag && <p className="text-xs text-slate-600 truncate">{eq.location_tag}</p>}
             <p className="text-[10px] text-slate-500 mt-1 truncate">{data.company?.name}</p>
           </div>

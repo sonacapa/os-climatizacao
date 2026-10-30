@@ -64,7 +64,7 @@ export default function ItemScreen({ osId, itemId, onBack }) {
       ) : null}>
       {locked && (
         <Card className={`p-4 space-y-3 ${item.status === 'feito' ? 'border-emerald-300 bg-emerald-50' : 'border-rose-200 bg-rose-50'}`}>
-          <p className="font-bold text-slate-900 flex items-center gap-2">
+          <p className="font-semibold text-slate-900 flex items-center gap-2">
             {item.status === 'feito' ? <CheckCircle2 className="w-5 h-5 text-emerald-600" /> : <XCircle className="w-5 h-5 text-rose-600" />}
             {item.status === 'feito' ? 'Serviço concluído neste aparelho' : 'Serviço não realizado'}
           </p>
@@ -85,7 +85,7 @@ export default function ItemScreen({ osId, itemId, onBack }) {
       <Card className="p-4 space-y-1">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="font-bold text-slate-900">{eqTitle(eq)}</p>
+            <p className="font-semibold text-slate-900">{eqTitle(eq)}</p>
             <p className="text-sm text-slate-500">{eqSpecs(eq) || 'Sem detalhes técnicos'} · {eq.code}</p>
           </div>
           <Btn variant="ghost" size="sm" icon={History} onClick={() => openModal('passport', { equipmentId: eq.id })}>Histórico</Btn>
@@ -110,7 +110,7 @@ export default function ItemScreen({ osId, itemId, onBack }) {
               <div className="grid grid-cols-3 gap-1.5">
                 {CHECK_OPTS.map(([st, label, on]) => (
                   <button key={st} disabled={locked} onClick={() => run(() => api.setChecklistStatus(c.id, c.status === st ? 'pending' : st))}
-                    className={`py-2.5 rounded-xl text-sm font-bold ${c.status === st ? on : 'bg-white border border-slate-300 text-slate-600'}`}>{label}</button>
+                    className={`py-2.5 rounded-xl text-sm font-semibold ${c.status === st ? on : 'bg-white border border-slate-300 text-slate-600'}`}>{label}</button>
                 ))}
               </div>
             </div>
@@ -161,7 +161,7 @@ export default function ItemScreen({ osId, itemId, onBack }) {
 function Section({ title, right, children }) {
   return (
     <section className="space-y-2">
-      <div className="flex items-center justify-between"><h2 className="font-bold text-slate-900">{title}</h2>{right}</div>
+      <div className="flex items-center justify-between"><h2 className="font-semibold text-slate-900">{title}</h2>{right}</div>
       <Card className="p-4">{children}</Card>
     </section>
   );
@@ -185,13 +185,13 @@ function Choice({ options, value, onChange, fmt, disabled, custom }) {
     <div className="flex flex-wrap gap-2">
       {options.map((o) => (
         <button key={o} disabled={disabled} onClick={() => { setEditing(false); onChange(o); }}
-          className={`px-4 py-2 rounded-xl text-sm font-bold border ${value === o && !editing ? 'bg-brand-600 border-brand-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>{fmt(o)}</button>
+          className={`px-4 py-2 rounded-xl text-sm font-semibold border ${value === o && !editing ? 'bg-brand-600 border-brand-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>{fmt(o)}</button>
       ))}
       {editing ? (
         <input autoFocus type="number" min="0" inputMode="numeric" placeholder={custom.unit} onBlur={(e) => { const n = Number(e.target.value); if (n >= 0 && e.target.value !== '') onChange(n); setEditing(false); }}
           onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()} className="w-24 border border-brand-500 rounded-xl px-3 py-2 text-sm" />
       ) : (
-        <button disabled={disabled} onClick={() => setEditing(true)} className={`px-4 py-2 rounded-xl text-sm font-bold border ${isCustom ? 'bg-brand-600 border-brand-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>
+        <button disabled={disabled} onClick={() => setEditing(true)} className={`px-4 py-2 rounded-xl text-sm font-semibold border ${isCustom ? 'bg-brand-600 border-brand-600 text-white' : 'bg-white border-slate-300 text-slate-700'} disabled:opacity-60`}>
           {isCustom ? `${value} ${custom.unit}` : 'Outro'}
         </button>
       )}

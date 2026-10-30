@@ -7,7 +7,7 @@ export default function ScreenFrame({ title, subtitle, onBack, right, children, 
       <header className="sticky top-0 z-30 bg-white border-b border-slate-200 px-2 h-14 flex items-center gap-1">
         <button onClick={onBack} aria-label="Voltar" className="p-2.5 rounded-xl text-slate-700 hover:bg-slate-100"><ArrowLeft className="w-6 h-6" /></button>
         <div className="min-w-0 flex-1">
-          <p className="font-bold text-slate-900 truncate leading-tight">{title}</p>
+          <p className="font-semibold text-slate-900 truncate leading-tight">{title}</p>
           {subtitle && <p className="text-xs text-slate-500 truncate">{subtitle}</p>}
         </div>
         {right}

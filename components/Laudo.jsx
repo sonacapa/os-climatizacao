@@ -29,7 +29,7 @@ export default function LaudoView({ d }) {
           <img src={company.logo_url} alt="" className="h-16 w-16 object-contain shrink-0" />
         )}
         <div className="min-w-0">
-          <h1 className="text-lg font-bold">{company.name}</h1>
+          <h1 className="text-lg font-semibold">{company.name}</h1>
           <p className="text-slate-600 text-xs">
             {[company.document && `CNPJ/CPF ${company.document}`, company.phone, company.email].filter(Boolean).join(' · ')}
           </p>
@@ -38,7 +38,7 @@ export default function LaudoView({ d }) {
       </header>
 
       <div className="flex items-end justify-between gap-3 mt-3">
-        <h2 className="text-base font-bold uppercase tracking-wide">Laudo técnico</h2>
+        <h2 className="text-base font-semibold uppercase tracking-wide">Laudo técnico</h2>
         <p className="text-xs text-slate-600">O.S. {String(os.number).padStart(4, '0')} · {fmtDate(done || os.date)}</p>
       </div>
       <p className="text-slate-600 text-xs">{os.service_type}</p>
@@ -50,7 +50,7 @@ export default function LaudoView({ d }) {
       </section>
 
       <section className="mt-3 border border-slate-300 rounded-lg p-3 text-xs">
-        <p className="font-bold text-sm mb-1">Equipamento {eq.code}</p>
+        <p className="font-semibold text-sm mb-1">Equipamento {eq.code}</p>
         <div className="grid grid-cols-2 gap-x-6 gap-y-0.5">
           <p><span className="text-slate-500">Local:</span> {eq.location_tag || '—'}</p>
           <p><span className="text-slate-500">Marca/modelo:</span> {[eq.brand, eq.model].filter(Boolean).join(' ') || '—'}</p>
@@ -62,7 +62,7 @@ export default function LaudoView({ d }) {
 
       {checklist.length > 0 && (
         <section className="mt-3">
-          <h3 className="font-bold text-sm mb-1">Serviços executados</h3>
+          <h3 className="font-semibold text-sm mb-1">Serviços executados</h3>
           <table className="w-full text-xs border border-slate-300">
             <tbody>
               {checklist.map((c, i) => (
@@ -78,7 +78,7 @@ export default function LaudoView({ d }) {
 
       {materials.length > 0 && (
         <section className="mt-3">
-          <h3 className="font-bold text-sm mb-1">Materiais e peças utilizados</h3>
+          <h3 className="font-semibold text-sm mb-1">Materiais e peças utilizados</h3>
           <ul className="text-xs list-disc pl-5">
             {materials.map((m, i) => <li key={i}>{m.quantity} {m.unit} — {m.name}</li>)}
           </ul>
@@ -87,7 +87,7 @@ export default function LaudoView({ d }) {
 
       {item.notes && (
         <section className="mt-3">
-          <h3 className="font-bold text-sm mb-1">Observações do técnico</h3>
+          <h3 className="font-semibold text-sm mb-1">Observações do técnico</h3>
           <p className="text-xs whitespace-pre-wrap">{item.notes}</p>
         </section>
       )}
@@ -107,12 +107,12 @@ export default function LaudoView({ d }) {
       <section className="mt-3 grid grid-cols-2 gap-3 break-inside-avoid">
         <div className="border border-slate-300 rounded-lg p-2.5">
           <p className="text-[11px] text-slate-500 uppercase font-semibold">Garantia do serviço</p>
-          <p className="font-bold text-sm">{wDays > 0 ? `${wDays} dias` : 'Sem garantia'}</p>
+          <p className="font-semibold text-sm">{wDays > 0 ? `${wDays} dias` : 'Sem garantia'}</p>
           {warrantyUntil && <p className="text-xs text-slate-600">Válida até {fmtDate(warrantyUntil)}</p>}
         </div>
         <div className="border border-slate-300 rounded-lg p-2.5">
           <p className="text-[11px] text-slate-500 uppercase font-semibold">Próxima preventiva</p>
-          <p className="font-bold text-sm">{nextPrev ? fmtDate(nextPrev) : 'Não programada'}</p>
+          <p className="font-semibold text-sm">{nextPrev ? fmtDate(nextPrev) : 'Não programada'}</p>
         </div>
       </section>
 

@@ -8,8 +8,10 @@ import MemberModal from './MemberModal';
 import OsDetailModal from './OsDetailModal';
 import OsFormModal from './OsFormModal';
 import PassportModal from './PassportModal';
+import RescheduleModal from './RescheduleModal';
 import QrLabelsModal from './QrLabelsModal';
 import ShareLaudosModal from './ShareLaudosModal';
+import RouteModal from '../field/RouteModal';
 import ScanResultModal from '../field/ScanResultModal';
 
 const MAP = {
@@ -23,7 +25,9 @@ const MAP = {
   os: OsFormModal,
   passport: PassportModal,
   qrLabels: QrLabelsModal,
+  reschedule: RescheduleModal,
   shareLaudos: ShareLaudosModal,
+  route: RouteModal,
   scanResult: ScanResultModal
 };
 

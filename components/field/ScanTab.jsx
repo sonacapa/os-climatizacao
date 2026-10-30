@@ -38,7 +38,7 @@ export default function ScanTab() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-xl font-bold text-slate-900">Ler QR do aparelho</h1>
+        <h1 className="text-xl font-semibold text-slate-900">Ler QR do aparelho</h1>
         <p className="text-sm text-slate-500">Aponte a câmera para a etiqueta. O aparelho abre com o histórico, pronto para atender.</p>
       </div>
       {scanning ? (

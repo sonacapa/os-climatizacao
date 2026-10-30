@@ -12,7 +12,7 @@ function Shell({ company, title, subtitle, children }) {
         <div className="max-w-sm mx-auto flex items-center gap-3">
           <Logo company={company} size="lg" />
           <div className="min-w-0">
-            <p className="font-display text-2xl font-bold leading-tight">{company?.name || 'Ordens de Serviço'}</p>
+            <p className="font-display text-2xl font-semibold leading-tight">{company?.name || 'Ordens de Serviço'}</p>
             <p className="text-sm text-slate-300 mt-0.5">Ordens de serviço e laudos</p>
           </div>
         </div>
@@ -20,7 +20,7 @@ function Shell({ company, title, subtitle, children }) {
       <div className="px-4 -mt-8 pb-10 flex-1">
         <div className="max-w-sm mx-auto bg-white rounded-xl border border-slate-200 shadow-lift p-6 space-y-4">
           <div>
-            <h1 className="text-2xl font-bold text-ink">{title}</h1>
+            <h1 className="text-2xl font-semibold text-ink">{title}</h1>
             {subtitle && <p className="text-sm text-slate-600 mt-1">{subtitle}</p>}
           </div>
           {children}
