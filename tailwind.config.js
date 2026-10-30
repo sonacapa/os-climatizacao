@@ -10,7 +10,7 @@ module.exports = {
         },
         ink: '#0e1726',
         heat: { 400: '#ff8a4f', 500: '#f2652a', 600: '#d9501a' },
-        paper: '#eef2fb'
+        paper: '#f8fafc'
       },
       fontFamily: {
         sans: ['var(--font-body)', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],

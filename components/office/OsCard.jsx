@@ -14,7 +14,7 @@ export default function OsCard({ os, showDate }) {
   return (
     <button
       onClick={() => openModal('osDetail', { osId: os.id })}
-      className="relative overflow-hidden w-full min-w-0 text-left bg-white rounded-2xl shadow-soft hover:shadow-lift transition-shadow p-4 pl-5 flex gap-4"
+      className="relative overflow-hidden w-full min-w-0 text-left bg-white rounded-xl border border-slate-200 shadow-sm hover:border-brand-300 transition-colors p-4 pl-5 flex gap-4"
     >
       <span className={`absolute left-0 inset-y-0 w-1.5 ${STATUS[os.status].dot}`} />
       <div className="w-14 shrink-0 text-center pt-0.5">

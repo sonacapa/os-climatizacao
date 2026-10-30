@@ -6,12 +6,12 @@ import { PageHeader, dueGroups, spDate } from '../shared';
 import { Btn, Card } from '../ui';
 import OsCard from './OsCard';
 
-function Stat({ grad, icon: Icon, value, label, onClick }) {
+function Stat({ tone, icon: Icon, value, label, onClick }) {
   return (
-    <button onClick={onClick} className={`text-left rounded-2xl p-4 text-white shadow-soft active:scale-[.98] transition ${grad}`}>
-      <span className="w-9 h-9 rounded-xl bg-white/25 grid place-items-center"><Icon className="w-5 h-5" /></span>
-      <p className="num text-4xl font-semibold leading-none mt-4">{value}</p>
-      <p className="text-sm text-white/90 mt-1.5">{label}</p>
+    <button onClick={onClick} className="text-left rounded-xl p-4 bg-white border border-slate-200 shadow-sm hover:border-slate-300 transition-colors">
+      <span className={`w-9 h-9 rounded-lg grid place-items-center ${tone}`}><Icon className="w-5 h-5" /></span>
+      <p className="num text-3xl font-semibold text-ink leading-none mt-4">{value}</p>
+      <p className="text-sm text-slate-500 mt-1.5">{label}</p>
     </button>
   );
 }
@@ -27,13 +27,12 @@ export default function Dashboard({ go }) {
   const running = open.filter((o) => o.status !== 'agendada');
   const doneToday = data.orders.filter((o) => o.status === 'finalizada' && (spDate(o.completed_at) === today || o.scheduled_date === today)).length;
   const due = dueGroups(data, 30);
-  const firstName = me.name.split(' ')[0];
+  const firstName = me.name.trim().split(/\s+/)[0].toLowerCase().replace(/^./, (c) => c.toUpperCase());
   const fresh = data.clients.length === 0 || data.company?.name === 'Minha Empresa de Climatização';
 
   return (
     <div className="space-y-6">
       <PageHeader title={`${greeting()}, ${firstName}`} subtitle={fmtDate(today)}>
-        <Btn icon={Plus} onClick={() => openModal('os')}>Nova O.S.</Btn>
         <Btn variant="secondary" icon={UserPlus} onClick={() => openModal('client')}>Novo cliente</Btn>
       </PageHeader>
 
@@ -50,10 +49,10 @@ export default function Dashboard({ go }) {
       )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <Stat grad="bg-gradient-to-br from-amber-400 to-orange-500" icon={CalendarDays} value={todays.length} label="Visitas hoje" onClick={() => go('os', { filter: 'hoje' })} />
-        <Stat grad="bg-gradient-to-br from-sky-400 to-brand-600" icon={Truck} value={running.length} label="Em andamento" onClick={() => go('os', { filter: 'abertas' })} />
-        <Stat grad="bg-gradient-to-br from-emerald-400 to-teal-600" icon={CheckCircle2} value={doneToday} label="Concluídas hoje" onClick={() => go('os', { filter: 'concluidas' })} />
-        <Stat grad="bg-gradient-to-br from-fuchsia-500 to-violet-600" icon={BellRing} value={due.length} label={due.length === 1 ? 'Cliente com preventiva' : 'Clientes com preventiva'} onClick={() => go('preventivas')} />
+        <Stat tone="bg-orange-50 text-orange-600" icon={CalendarDays} value={todays.length} label="Visitas hoje" onClick={() => go('os', { filter: 'hoje' })} />
+        <Stat tone="bg-blue-50 text-blue-600" icon={Truck} value={running.length} label="Em andamento" onClick={() => go('os', { filter: 'abertas' })} />
+        <Stat tone="bg-emerald-50 text-emerald-600" icon={CheckCircle2} value={doneToday} label="Concluídas hoje" onClick={() => go('os', { filter: 'concluidas' })} />
+        <Stat tone="bg-violet-50 text-violet-600" icon={BellRing} value={due.length} label={due.length === 1 ? 'Cliente com preventiva' : 'Clientes com preventiva'} onClick={() => go('preventivas')} />
       </div>
 
       {late.length > 0 && (

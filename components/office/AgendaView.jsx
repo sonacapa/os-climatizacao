@@ -144,7 +144,7 @@ export default function AgendaView() {
 
   return (
     <div className="space-y-4">
-      <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="overflow-x-auto scrollbar-none -mx-4 px-4 md:mx-0 md:px-0">
         <Segmented value={mode} onChange={setMode} options={[
           { value: 'dia', label: 'Dia' }, { value: 'semana', label: 'Semana' }, { value: 'mes', label: 'Mês' }, { value: 'tecnico', label: 'Técnico' }
         ]} />
@@ -157,11 +157,11 @@ export default function AgendaView() {
         </div>
         <p className="font-display text-lg font-semibold capitalize mr-auto">{mode === 'tecnico' ? dayLabel(cursor) : title}</p>
         <select value={techId} onChange={(e) => setTechId(e.target.value)} className={pillCls} aria-label="Técnico">
-          <option value="">Todos os técnicos</option>
+          <option value="">Técnicos</option>
           {techs.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
         </select>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className={pillCls} aria-label="Situação">
-          <option value="">Todas as situações</option>
+          <option value="">Situação</option>
           {Object.entries(STATUS).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
         </select>
       </div>

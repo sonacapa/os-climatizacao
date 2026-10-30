@@ -9,7 +9,7 @@ export const inputCls =
   'w-full min-h-[46px] border border-slate-300 rounded-lg px-3.5 py-2.5 bg-white text-ink placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none disabled:bg-slate-100 disabled:text-slate-500';
 
 export const pillCls =
-  'min-h-[38px] rounded-full border border-slate-300 bg-white pl-3.5 pr-8 py-1.5 text-sm text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none';
+  'min-h-[38px] w-full min-w-0 rounded-lg border border-slate-300 bg-white pl-3 pr-8 py-1.5 text-sm truncate text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-200 focus:outline-none';
 
 export function Field({ label, hint, children, className = '' }) {
   return (
@@ -22,9 +22,9 @@ export function Field({ label, hint, children, className = '' }) {
 }
 
 const VARIANTS = {
-  primary: 'bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft hover:brightness-110 disabled:opacity-50',
+  primary: 'bg-brand-600 text-white shadow-sm hover:bg-brand-700 disabled:opacity-50',
   success: 'bg-emerald-600 text-white hover:bg-emerald-700 disabled:bg-emerald-300',
-  heat: 'bg-gradient-to-br from-heat-400 to-rose-500 text-white shadow-soft hover:brightness-105 disabled:opacity-50'
+  heat: 'bg-brand-600 text-white shadow-sm hover:bg-brand-700 disabled:opacity-50'
   ,white: 'bg-white text-ink hover:bg-slate-100 disabled:opacity-50',
   ink: 'bg-ink text-white hover:bg-slate-800 disabled:opacity-50',
   secondary: 'bg-white text-slate-800 border border-slate-300 hover:bg-slate-50 disabled:text-slate-400',
@@ -42,7 +42,7 @@ export function Btn({ variant = 'primary', size = 'md', icon: Icon, loading, cla
       type="button"
       {...props}
       disabled={props.disabled || loading}
-      className={`inline-flex items-center justify-center font-medium rounded-xl transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-medium rounded-lg transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : Icon ? <Icon className="w-4 h-4 shrink-0" /> : null}
       {children}
@@ -130,7 +130,7 @@ export function Chip({ children, tone = 'slate', className = '' }) {
 
 export function Card({ children, className = '', ...props }) {
   return (
-    <div {...props} className={`bg-white rounded-2xl shadow-soft ${className}`}>
+    <div {...props} className={`bg-white rounded-xl border border-slate-200 shadow-sm ${className}`}>
       {children}
     </div>
   );
@@ -165,7 +165,7 @@ export function SearchBox({ value, onChange, placeholder, className = '' }) {
 
 export function Segmented({ value, onChange, options, className = '' }) {
   return (
-    <div className={`inline-flex bg-white shadow-soft rounded-full p-1 gap-0.5 ${className}`} role="tablist">
+    <div className={`inline-flex bg-slate-100 rounded-lg p-1 gap-0.5 ${className}`} role="tablist">
       {options.map((o) => (
         <button
           key={o.value}
@@ -173,8 +173,8 @@ export function Segmented({ value, onChange, options, className = '' }) {
           role="tab"
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
-          className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors flex-1 whitespace-nowrap ${
-            value === o.value ? 'bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft' : 'text-slate-500 hover:text-slate-800'
+          className={`px-3.5 py-1.5 rounded-md text-sm font-medium transition-colors flex-1 whitespace-nowrap ${
+            value === o.value ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           {o.label}

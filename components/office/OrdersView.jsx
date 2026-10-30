@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react';
 import { ClipboardList, Plus } from 'lucide-react';
 import { OPEN, addDaysISO, norm, osLabel, relDay, todayISO } from '@/lib/utils';
 import { useApp } from '../AppContext';
-import { PageHeader } from '../shared';
 import { Btn, EmptyState, SearchBox, Segmented, pillCls } from '../ui';
 import AgendaView from './AgendaView';
 import OsCard from './OsCard';
@@ -47,14 +46,13 @@ export default function OrdersView({ filter, setFilter }) {
   let lastDate = null;
   return (
     <div>
-      <PageHeader title="Ordens de serviço" subtitle="Cada O.S. é uma visita a um cliente, com um ou vários aparelhos.">
-        <Btn icon={Plus} onClick={() => openModal('os')}>Nova O.S.</Btn>
-      </PageHeader>
-
-      <div className="mb-4"><Segmented value={view} onChange={setView} options={[{ value: 'lista', label: 'Lista' }, { value: 'agenda', label: 'Agenda' }]} /></div>
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <h1 className="text-xl font-semibold text-ink">Ordens de serviço</h1>
+        <Segmented value={view} onChange={setView} options={[{ value: 'lista', label: 'Lista' }, { value: 'agenda', label: 'Agenda' }]} />
+      </div>
       {view === 'agenda' ? <AgendaView /> : (<>
       <div className="space-y-3 mb-4">
-        <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="overflow-x-auto scrollbar-none -mx-4 px-4 md:mx-0 md:px-0">
           <Segmented value={filter} onChange={setFilter} options={[
             { value: 'abertas', label: 'Em aberto', count: counts.abertas },
             { value: 'hoje', label: 'Hoje', count: counts.hoje },
@@ -66,11 +64,11 @@ export default function OrdersView({ filter, setFilter }) {
         <SearchBox value={q} onChange={setQ} placeholder="Buscar por cliente, técnico, nº da O.S. ou local do aparelho" />
         <div className="grid grid-cols-2 gap-2 sm:max-w-md">
           <select value={techId} onChange={(e) => setTechId(e.target.value)} className={pillCls} aria-label="Técnico">
-            <option value="">Todos os técnicos</option>
+            <option value="">Técnicos</option>
             {data.profiles.filter((p) => p.role === 'tech' || p.does_field).map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
           </select>
           <select value={period} onChange={(e) => setPeriod(e.target.value)} className={pillCls} aria-label="Período" disabled={['abertas', 'hoje'].includes(filter)}>
-            <option value="0">Todo o período</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="90">Últimos 90 dias</option>
+            <option value="0">Período</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="90">Últimos 90 dias</option>
           </select>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { Plus } from 'lucide-react';
+import { AlertCircle, Plus } from 'lucide-react';
 import { api } from '@/lib/api';
 import { SERVICE_TYPES, fmtTime, todayISO } from '@/lib/utils';
 import { useApp } from '../AppContext';
@@ -56,7 +56,6 @@ export default function OsFormModal({ os, preset = {} }) {
   return (
     <Modal
       title={editing ? 'Editar O.S.' : 'Nova O.S.'}
-      subtitle="Uma O.S. é uma visita ao cliente e pode ter vários aparelhos."
       maxWidth="max-w-xl"
       onClose={closeModal}
       footer={
@@ -102,12 +101,12 @@ export default function OsFormModal({ os, preset = {} }) {
         )}
 
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Serviço">
+          <Field label="Serviço" className="col-span-2">
             <select value={f.service_type} onChange={set('service_type')} className={inputCls}>
               {SERVICE_TYPES.map((s) => <option key={s}>{s}</option>)}
             </select>
           </Field>
-          <Field label="Técnico">
+          <Field label="Técnico" className="col-span-2">
             <select value={f.tech_id} onChange={set('tech_id')} className={inputCls}>
               <option value="">A definir</option>
               {techs.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -119,7 +118,7 @@ export default function OsFormModal({ os, preset = {} }) {
         <Field label="Observações para o técnico" hint="Opcional. Ex.: portaria, horário combinado, defeito relatado.">
           <textarea rows={2} value={f.notes} onChange={set('notes')} className={inputCls} />
         </Field>
-        {!f.tech_id && <p className="text-xs text-amber-700 bg-amber-50 rounded-lg px-3 py-2">Sem técnico definido, o chamado não aparece para ninguém na rua.</p>}
+        {!f.tech_id && <div role="alert" className="flex items-start gap-2 text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5"><AlertCircle className="w-4 h-4 mt-0.5 shrink-0" /><p>Sem técnico definido, o chamado não aparece para ninguém na rua.</p></div>}
       </form>
     </Modal>
   );

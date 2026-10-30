@@ -26,19 +26,19 @@ export default function JobsTab() {
 
   return (
     <div>
-      <div className="hero text-white -mx-4 px-4 pt-3 pb-12 rounded-b-[28px]">
-        <h1 className="text-[1.65rem] leading-tight font-semibold">{greeting()}, {me.name.split(' ')[0]}</h1>
-        <p className="text-sm text-white/85 mt-0.5">{n === 0 ? 'Nenhum chamado para hoje.' : n === 1 ? '1 chamado para hoje.' : `${n} chamados para hoje.`}</p>
+      <div className="pt-1 pb-4">
+        <h1 className="text-[1.5rem] leading-tight font-semibold text-ink">{greeting()}, {me.name.trim().split(/\s+/)[0].toLowerCase().replace(/^./, (c) => c.toUpperCase())}</h1>
+        <p className="text-sm text-slate-500 mt-0.5">{n === 0 ? 'Nenhum chamado para hoje.' : n === 1 ? '1 chamado para hoje.' : `${n} chamados para hoje.`}</p>
       </div>
-      <div className="space-y-4 -mt-8 relative">
-      <Segmented className="w-full shadow-soft" value={view} onChange={setView} options={[
+      <div className="space-y-4">
+      <Segmented className="w-full" value={view} onChange={setView} options={[
         { value: 'hoje', label: 'Hoje', count: lists.hoje.length },
         { value: 'proximos', label: 'Próximos', count: lists.proximos.length },
         { value: 'feitos', label: 'Histórico' }
       ]} />
       {view === 'hoje' && n >= 2 && (
-        <button onClick={() => openModal('route', { osIds: lists.hoje.map((o) => o.id), onApply: setOrder })} className="w-full flex items-center gap-3 rounded-2xl bg-white shadow-soft px-4 py-3 text-left">
-          <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white grid place-items-center shrink-0"><Route className="w-5 h-5" /></span><span className="flex-1"><span className="block text-sm font-medium text-ink">Rota do dia</span><span className="block text-xs text-slate-500">Ver a melhor ordem para {n} visitas</span></span>
+        <button onClick={() => openModal('route', { osIds: lists.hoje.map((o) => o.id), onApply: setOrder })} className="w-full flex items-center gap-3 rounded-xl border border-slate-200 bg-white shadow-sm px-4 py-3 text-left">
+          <span className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 grid place-items-center shrink-0"><Route className="w-5 h-5" /></span><span className="flex-1"><span className="block text-sm font-medium text-ink">Rota do dia</span><span className="block text-xs text-slate-500">Ver a melhor ordem para {n} visitas</span></span>
         </button>
       )}
       {view === 'feitos' ? <History list={list} /> : list.length === 0 ? (
@@ -68,21 +68,22 @@ function JobCard({ os, onOpen, hero = false }) {
   }[os.status];
 
   const dark = hero && !!main;
-  const sub = dark ? 'text-white/85' : 'text-slate-600';
-  const iconBtn = dark ? 'border-white/25 text-white' : 'border-slate-300 text-slate-700';
+  const hl = dark;
+  const sub = 'text-slate-600';
+  const iconBtn = 'border-slate-300 text-slate-700';
 
   return (
-    <div className={`rounded-2xl overflow-hidden shadow-soft ${dark ? 'bg-gradient-to-br from-heat-400 via-rose-500 to-fuchsia-600 text-white' : 'bg-white'}`}>
+    <div className={`rounded-xl overflow-hidden border shadow-sm ${dark ? 'bg-white border-brand-300 ring-1 ring-brand-200' : 'bg-white border-slate-200'}`}>
       <div role="button" tabIndex={0} onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()} className="p-4 space-y-3 cursor-pointer">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className={`num font-semibold leading-none ${dark ? 'text-4xl' : 'text-2xl'} ${late ? (dark ? 'text-white' : 'text-rose-600') : ''}`}>{fmtTime(os.scheduled_time) || '--:--'}</p>
-            <p className={`text-xs font-semibold mt-1.5 ${late ? (dark ? 'text-white' : 'text-rose-600') : sub}`}>
+            <p className={`num font-semibold leading-none ${dark ? 'text-4xl' : 'text-2xl'} ${late ? 'text-rose-600' : ''}`}>{fmtTime(os.scheduled_time) || '--:--'}</p>
+            <p className={`text-xs font-semibold mt-1.5 ${late ? 'text-rose-600' : sub}`}>
               {closed ? fmtDate(os.scheduled_date) : relDay(os.scheduled_date)}{late ? ' · atrasado' : ''}
             </p>
           </div>
           {dark ? (
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-white/25 rounded-full px-2.5 py-1"><span className="w-1.5 h-1.5 rounded-full bg-white" />{STATUS[os.status].label}</span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-brand-50 text-brand-700 rounded-md px-2 py-1"><span className="w-1.5 h-1.5 rounded-full bg-brand-600" />{STATUS[os.status].label}</span>
           ) : <StatusBadge status={os.status} />}
         </div>
         <div>
@@ -90,11 +91,11 @@ function JobCard({ os, onOpen, hero = false }) {
           <p className={`text-xs mt-0.5 ${sub}`}>{osLabel(os)} · {os.service_type} · {os.items.length} {os.items.length === 1 ? 'aparelho' : 'aparelhos'}{done > 0 ? ` (${done} feito${done > 1 ? 's' : ''})` : ''}</p>
         </div>
         {client?.address && <p className={`text-sm flex gap-1.5 ${sub}`}><MapPin className="w-4 h-4 opacity-70 mt-0.5 shrink-0" /> {client.address}</p>}
-        {os.notes && <p className={`text-sm rounded-lg px-3 py-2 ${dark ? 'bg-white/10 text-white' : 'bg-amber-50 text-amber-900'}`}>{os.notes}</p>}
+        {os.notes && <p className={`text-sm rounded-lg px-3 py-2 ${'bg-amber-50 text-amber-900'}`}>{os.notes}</p>}
       </div>
       {main ? (
         <div className="px-4 pb-4 flex gap-2">
-          <Btn variant={dark ? 'white' : 'primary'} size="lg" className="flex-1" onClick={stop(main.fn)}>{main.label}</Btn>
+          <Btn variant="primary" size="lg" className="flex-1" onClick={stop(main.fn)}>{main.label}</Btn>
           {client?.address && <a href={mapsLink(client.address)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} aria-label="Abrir rota" className={`inline-flex items-center justify-center w-14 rounded-lg border ${iconBtn}`}><Navigation className="w-5 h-5" /></a>}
           {client?.phone && <a href={`tel:${client.phone}`} onClick={(e) => e.stopPropagation()} aria-label="Ligar" className={`inline-flex items-center justify-center w-14 rounded-lg border ${iconBtn}`}><Phone className="w-5 h-5" /></a>}
         </div>

@@ -1,6 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { ArrowLeft, ClipboardList, History, MapPin, MessageCircle, Pencil, Phone, Plus, QrCode, UserPlus, Users } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Wind, ClipboardList, History, MapPin, MessageCircle, Pencil, Phone, Plus, QrCode, UserPlus, Users } from 'lucide-react';
 import { api } from '@/lib/api';
 import { geocode } from '@/lib/geo';
 import { norm, waLink } from '@/lib/utils';
@@ -52,22 +52,23 @@ export default function ClientsView() {
       <div className="grid md:grid-cols-[22rem_1fr] gap-5 items-start">
         <div className={`space-y-3 ${selected ? 'hidden md:block' : ''}`}>
           <SearchBox value={q} onChange={setQ} placeholder="Buscar cliente ou aparelho" />
-          <Card className="divide-y divide-slate-100 overflow-hidden">
+          <div className="space-y-3">
             {rows.map(({ c, count, hits }) => (
-              <button key={c.id} onClick={() => setSelId(c.id)} className={`w-full text-left px-4 py-3 hover:bg-slate-50 ${selId === c.id ? 'bg-brand-50' : ''}`}>
-                <div className="flex items-center justify-between gap-2">
+              <button key={c.id} onClick={() => setSelId(c.id)} className={`w-full text-left px-4 py-3 rounded-xl bg-white border hover:border-brand-300 transition-colors flex items-center gap-3 ${selId === c.id ? 'border-brand-500 ring-1 ring-brand-200' : 'border-slate-200/80'}`}>
+                <div className="min-w-0 flex-1">
                   <p className="font-semibold text-slate-900 truncate">{c.name}</p>
-                  <span className="text-xs text-slate-500 shrink-0">{count} {count === 1 ? 'aparelho' : 'aparelhos'}</span>
+                  <p className="text-xs text-slate-500 truncate">{c.address || c.phone || 'Sem endereço'}</p>
+                  <p className="text-xs text-slate-500 mt-1">{count} {count === 1 ? 'aparelho' : 'aparelhos'}</p>
+                  {hits.length > 0 && <p className="text-xs text-brand-700 mt-0.5 truncate">Aparelho: {hits.slice(0, 2).map((h) => `${h.code} · ${h.location_tag}`).join(', ')}</p>}
                 </div>
-                <p className="text-xs text-slate-500 truncate">{c.address || c.phone || 'Sem endereço'}</p>
-                {hits.length > 0 && <p className="text-xs text-brand-700 mt-0.5 truncate">Aparelho: {hits.slice(0, 2).map((h) => `${h.code} · ${h.location_tag}`).join(', ')}</p>}
+                <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
               </button>
             ))}
             {rows.length === 0 && (
               <EmptyState icon={Users} title={q ? 'Nada encontrado' : 'Nenhum cliente ainda'} text={q ? 'Tente outro termo.' : 'Cadastre o primeiro cliente para começar.'}
                 action={!q && <Btn icon={UserPlus} onClick={() => openModal('client', { onSaved: (c) => setSelId(c.id) })}>Novo cliente</Btn>} />
             )}
-          </Card>
+          </div>
         </div>
 
         <div className={selected ? '' : 'hidden md:block'}>
@@ -122,20 +123,22 @@ function ClientDetail({ client, onBack }) {
       {machines.length === 0 ? (
         <Card><EmptyState title="Nenhum aparelho cadastrado" text="Cadastre os aparelhos deste cliente. Basta o local e, se quiser, marca e BTUs." action={<Btn icon={Plus} onClick={() => openModal('equipment', { clientId: client.id })}>Novo aparelho</Btn>} /></Card>
       ) : (
-        <Card className="divide-y divide-slate-100 overflow-hidden">
+        <div className="space-y-3">
           {shown.map((m) => (
-            <div key={m.id} className="flex items-center gap-2 pr-2">
-              <button onClick={() => openModal('passport', { equipmentId: m.id })} className="flex-1 min-w-0 text-left px-4 py-3 hover:bg-slate-50">
+            <div key={m.id} className="flex items-center gap-1 pr-2 rounded-xl bg-white border border-slate-200/80 hover:border-brand-300 transition-colors">
+              <button onClick={() => openModal('passport', { equipmentId: m.id })} className="flex-1 min-w-0 text-left px-4 py-3">
+                <p className="text-xs text-slate-500 truncate">{client.name}</p>
                 <p className="font-semibold text-slate-900 truncate">{m.location_tag || m.code}</p>
-                <p className="text-xs text-slate-500 truncate">{eqTitle(m)}{eqSpecs(m) ? ` · ${eqSpecs(m)}` : ''} · {m.code}</p>
-                <div className="flex flex-wrap gap-1.5 mt-1"><WarrantyChip eq={m} /><MaintChip eq={m} /></div>
+                <p className="text-xs text-slate-600 truncate mt-1 flex items-center gap-1.5"><Wind className="w-3.5 h-3.5 text-slate-400 shrink-0" />{eqTitle(m)}{eqSpecs(m) ? ` · ${eqSpecs(m)}` : ''} · {m.code}</p>
+                <div className="flex flex-wrap gap-1.5 mt-1.5"><WarrantyChip eq={m} /><MaintChip eq={m} /></div>
               </button>
               <IconBtn icon={History} label="Histórico" onClick={() => openModal('passport', { equipmentId: m.id })} />
               <IconBtn icon={QrCode} label="Etiqueta QR" onClick={() => openModal('qrLabels', { equipment: m })} />
               <IconBtn icon={Pencil} label="Editar aparelho" onClick={() => openModal('equipment', { equipment: m })} />
+              <ChevronRight className="w-5 h-5 text-slate-400 shrink-0" />
             </div>
           ))}
-        </Card>
+        </div>
       )}
     </div>
   );
