@@ -42,7 +42,7 @@ export default function OfficeApp() {
 
   return (
     <div className="min-h-screen md:flex">
-      <aside className="hidden md:flex w-64 shrink-0 flex-col bg-white border-r border-slate-200 text-slate-600 h-screen sticky top-0 no-print">
+      <aside className="hidden md:flex w-64 shrink-0 flex-col bg-white shadow-soft text-slate-600 h-screen sticky top-0 no-print">
         <div className="px-4 py-5 flex items-center gap-3">
           <Logo company={data.company} />
           <p className="font-display font-semibold text-ink leading-tight">{data.company?.name}</p>
@@ -50,7 +50,7 @@ export default function OfficeApp() {
         <nav className="flex-1 px-3 pb-3 space-y-0.5 overflow-y-auto">
           {TABS.map((t) => (
             <button key={t.id} onClick={() => go(t.id)} aria-current={tab === t.id ? 'page' : undefined}
-              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left ${tab === t.id ? 'bg-brand-50 text-brand-700 before:absolute before:left-0 before:top-2 before:bottom-2 before:w-1 before:rounded-full before:bg-brand-600' : 'text-slate-600 hover:bg-slate-100 hover:text-ink'}`}>
+              className={`relative w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-left ${tab === t.id ? 'bg-gradient-to-r from-brand-500 to-violet-600 text-white shadow-soft' : 'text-slate-600 hover:bg-slate-100 hover:text-ink'}`}>
               <t.icon className="w-[18px] h-[18px]" /> <span className="flex-1">{t.label}</span>
               {badge(t.id) > 0 && <span className="bg-heat-500 text-white text-xs font-semibold rounded-md px-1.5 py-0.5">{badge(t.id)}</span>}
             </button>
@@ -67,7 +67,7 @@ export default function OfficeApp() {
       </aside>
 
       <div className="flex-1 min-w-0 flex flex-col">
-        <header className="md:hidden sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 text-ink h-14 px-4 flex items-center gap-3 no-print">
+        <header className="md:hidden sticky top-0 z-30 hero text-white h-14 px-4 flex items-center gap-3 no-print">
           <Logo company={data.company} size="sm" />
           <h2 className="font-display font-semibold text-lg flex-1 truncate">{current?.short || current?.label}</h2>
           <ModeSwitch />
@@ -83,21 +83,21 @@ export default function OfficeApp() {
           {tab === 'empresa' && <SettingsView />}
         </main>
 
-        <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 shadow-pop grid grid-cols-5 safe-bottom no-print">
+        <nav className="md:hidden fixed bottom-3 inset-x-3 z-30 bg-white rounded-3xl shadow-lift grid grid-cols-5 no-print">
           {MAIN.map((t) => (
             <button key={t.id} onClick={() => go(t.id)} className={`relative flex flex-col items-center gap-1 pt-2 pb-2.5 text-[11px] font-medium ${tab === t.id ? 'text-brand-700' : 'text-slate-500'}`}>
-              <span className={`px-4 py-1 rounded-full transition-colors ${tab === t.id ? 'bg-brand-100' : ''}`}><t.icon className="w-5 h-5" /></span> {t.short || t.label}
+              <span className={`px-4 py-1 rounded-full transition-colors ${tab === t.id ? 'bg-brand-600 text-white' : ''}`}><t.icon className="w-5 h-5" /></span> {t.short || t.label}
               {badge(t.id) > 0 && <span className="absolute top-1 right-[22%] bg-heat-500 text-white text-[10px] font-semibold rounded-full px-1.5">{badge(t.id)}</span>}
             </button>
           ))}
           <button onClick={() => setMore(true)} className={`flex flex-col items-center gap-1 pt-2 pb-2.5 text-[11px] font-medium ${['catalogo', 'equipe', 'empresa'].includes(tab) ? 'text-brand-700' : 'text-slate-500'}`}>
-            <span className={`px-4 py-1 rounded-full ${['catalogo', 'equipe', 'empresa'].includes(tab) ? 'bg-brand-100' : ''}`}><MoreHorizontal className="w-5 h-5" /></span> Mais
+            <span className={`px-4 py-1 rounded-full ${['catalogo', 'equipe', 'empresa'].includes(tab) ? 'bg-brand-600 text-white' : ''}`}><MoreHorizontal className="w-5 h-5" /></span> Mais
           </button>
         </nav>
       </div>
 
       {['inicio', 'os'].includes(tab) && (
-        <button onClick={() => openModal('os')} aria-label="Nova O.S." className="md:hidden fixed right-4 bottom-24 z-30 w-14 h-14 rounded-2xl bg-heat-500 text-white shadow-lift flex items-center justify-center active:scale-95">
+        <button onClick={() => openModal('os')} aria-label="Nova O.S." className="md:hidden fixed right-4 bottom-28 z-30 w-14 h-14 rounded-2xl bg-gradient-to-br from-heat-400 to-rose-500 text-white shadow-lift flex items-center justify-center active:scale-95">
           <Plus className="w-7 h-7" />
         </button>
       )}

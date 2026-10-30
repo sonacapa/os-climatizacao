@@ -32,23 +32,23 @@ export default function FieldApp() {
 
   return (
     <div className="min-h-screen flex flex-col bg-paper">
-      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur border-b border-slate-200 text-ink px-4 h-14 flex items-center gap-3">
+      <header className="sticky top-0 z-30 hero text-white px-4 h-14 flex items-center gap-3">
         <Logo company={data.company} size="sm" />
         <p className="font-display font-semibold text-lg flex-1 truncate">{data.company?.name}</p>
         <ModeSwitch />
       </header>
-      <main className="flex-1 w-full max-w-2xl mx-auto p-4 pb-36">
+      <main className="flex-1 w-full max-w-2xl mx-auto px-4 pb-36">
         {tab === 'chamados' && <JobsTab />}
         {tab === 'scan' && <ScanTab />}
         {tab === 'maquinas' && <MachinesTab />}
         {tab === 'conta' && <AccountTab />}
       </main>
-      <nav className="fixed bottom-0 inset-x-0 z-30 bg-white border-t border-slate-200 shadow-pop safe-bottom">
+      <nav className="fixed bottom-3 inset-x-3 z-30 bg-white rounded-3xl shadow-lift">
         <div className="max-w-2xl mx-auto grid grid-cols-4">
           {TABS.map((t) => (
             <button key={t.id} onClick={() => setTab(t.id)} aria-current={tab === t.id ? 'page' : undefined}
               className={`flex flex-col items-center gap-1 pt-2 pb-2.5 text-[11px] font-medium ${tab === t.id ? 'text-brand-700' : 'text-slate-500'}`}>
-              <span className={`px-5 py-1 rounded-full transition-colors ${tab === t.id ? 'bg-brand-100' : ''}`}><t.icon className="w-5 h-5" /></span> {t.label}
+              <span className={`px-5 py-1 rounded-full transition-colors ${tab === t.id ? 'bg-brand-600 text-white' : ''}`}><t.icon className="w-5 h-5" /></span> {t.label}
             </button>
           ))}
         </div>

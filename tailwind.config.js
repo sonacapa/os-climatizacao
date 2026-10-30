@@ -10,13 +10,13 @@ module.exports = {
         },
         ink: '#0e1726',
         heat: { 400: '#ff8a4f', 500: '#f2652a', 600: '#d9501a' },
-        paper: '#f2f4f8'
+        paper: '#eef2fb'
       },
       fontFamily: {
         sans: ['var(--font-body)', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
         display: ['var(--font-display)', 'var(--font-body)', 'system-ui', 'sans-serif']
       },
-      boxShadow: { card: '0 1px 0 rgba(14,23,38,.04)', pop: '0 -6px 24px rgba(14,23,38,.10)', lift: '0 12px 32px rgba(14,23,38,.22)' }
+      boxShadow: { card: '0 1px 0 rgba(14,23,38,.04)', soft: '0 6px 20px rgba(37,56,160,.09)', pop: '0 -6px 24px rgba(14,23,38,.10)', lift: '0 12px 32px rgba(14,23,38,.22)' }
     }
   },
   plugins: []

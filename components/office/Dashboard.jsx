@@ -1,16 +1,17 @@
 'use client';
-import { AlertTriangle, Plus, UserPlus } from 'lucide-react';
+import { AlertTriangle, BellRing, CheckCircle2, Plus, Truck, UserPlus, CalendarDays } from 'lucide-react';
 import { OPEN, fmtDate, relDay, todayISO } from '@/lib/utils';
 import { useApp } from '../AppContext';
 import { PageHeader, dueGroups, spDate } from '../shared';
 import { Btn, Card } from '../ui';
 import OsCard from './OsCard';
 
-function Stat({ dot, value, label, onClick }) {
+function Stat({ grad, icon: Icon, value, label, onClick }) {
   return (
-    <button onClick={onClick} className="text-left px-4 py-4 bg-white hover:bg-slate-50 transition-colors">
-      <p className="num text-3xl font-semibold text-ink leading-none">{value}</p>
-      <p className="text-sm text-slate-600 mt-2 flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${dot}`} />{label}</p>
+    <button onClick={onClick} className={`text-left rounded-2xl p-4 text-white shadow-soft active:scale-[.98] transition ${grad}`}>
+      <span className="w-9 h-9 rounded-xl bg-white/25 grid place-items-center"><Icon className="w-5 h-5" /></span>
+      <p className="num text-4xl font-semibold leading-none mt-4">{value}</p>
+      <p className="text-sm text-white/90 mt-1.5">{label}</p>
     </button>
   );
 }
@@ -48,12 +49,12 @@ export default function Dashboard({ go }) {
         </Card>
       )}
 
-      <Card className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-slate-200 overflow-hidden">
-        <Stat dot="bg-amber-500" value={todays.length} label="Visitas hoje" onClick={() => go('os', { filter: 'hoje' })} />
-        <Stat dot="bg-brand-500" value={running.length} label="Em andamento" onClick={() => go('os', { filter: 'abertas' })} />
-        <Stat dot="bg-emerald-500" value={doneToday} label="Concluídas hoje" onClick={() => go('os', { filter: 'concluidas' })} />
-        <Stat dot="bg-heat-500" value={due.length} label={due.length === 1 ? 'Cliente com preventiva' : 'Clientes com preventiva'} onClick={() => go('preventivas')} />
-      </Card>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <Stat grad="bg-gradient-to-br from-amber-400 to-orange-500" icon={CalendarDays} value={todays.length} label="Visitas hoje" onClick={() => go('os', { filter: 'hoje' })} />
+        <Stat grad="bg-gradient-to-br from-sky-400 to-brand-600" icon={Truck} value={running.length} label="Em andamento" onClick={() => go('os', { filter: 'abertas' })} />
+        <Stat grad="bg-gradient-to-br from-emerald-400 to-teal-600" icon={CheckCircle2} value={doneToday} label="Concluídas hoje" onClick={() => go('os', { filter: 'concluidas' })} />
+        <Stat grad="bg-gradient-to-br from-fuchsia-500 to-violet-600" icon={BellRing} value={due.length} label={due.length === 1 ? 'Cliente com preventiva' : 'Clientes com preventiva'} onClick={() => go('preventivas')} />
+      </div>
 
       {late.length > 0 && (
         <section className="space-y-2">

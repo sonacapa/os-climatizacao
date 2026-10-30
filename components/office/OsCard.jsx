@@ -1,6 +1,6 @@
 'use client';
 import { MapPin, User } from 'lucide-react';
-import { fmtTime, osLabel } from '@/lib/utils';
+import { STATUS, fmtTime, osLabel } from '@/lib/utils';
 import { useApp } from '../AppContext';
 import { StatusBadge } from '../ui';
 
@@ -14,10 +14,11 @@ export default function OsCard({ os, showDate }) {
   return (
     <button
       onClick={() => openModal('osDetail', { osId: os.id })}
-      className="w-full min-w-0 text-left bg-white rounded-xl border border-slate-200 hover:border-brand-400 transition-colors p-4 flex gap-4"
+      className="relative overflow-hidden w-full min-w-0 text-left bg-white rounded-2xl shadow-soft hover:shadow-lift transition-shadow p-4 pl-5 flex gap-4"
     >
+      <span className={`absolute left-0 inset-y-0 w-1.5 ${STATUS[os.status].dot}`} />
       <div className="w-14 shrink-0 text-center pt-0.5">
-        <p className="num text-xl font-semibold text-ink leading-none">{fmtTime(os.scheduled_time) || '--:--'}</p>
+        <p className="num text-xl font-semibold text-brand-700 leading-none">{fmtTime(os.scheduled_time) || '--:--'}</p>
         {showDate && <p className="text-[11px] font-semibold text-slate-500 mt-1 leading-tight">{showDate}</p>}
       </div>
       <div className="min-w-0 flex-1 space-y-1.5 border-l border-slate-200 pl-4">

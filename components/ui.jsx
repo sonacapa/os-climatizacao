@@ -22,9 +22,10 @@ export function Field({ label, hint, children, className = '' }) {
 }
 
 const VARIANTS = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 disabled:bg-brand-300',
+  primary: 'bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft hover:brightness-110 disabled:opacity-50',
   success: 'bg-emerald-600 text-white hover:bg-emerald-700 disabled:bg-emerald-300',
-  heat: 'bg-heat-500 text-white hover:bg-heat-600 disabled:opacity-50',
+  heat: 'bg-gradient-to-br from-heat-400 to-rose-500 text-white shadow-soft hover:brightness-105 disabled:opacity-50'
+  ,white: 'bg-white text-ink hover:bg-slate-100 disabled:opacity-50',
   ink: 'bg-ink text-white hover:bg-slate-800 disabled:opacity-50',
   secondary: 'bg-white text-slate-800 border border-slate-300 hover:bg-slate-50 disabled:text-slate-400',
   soft: 'bg-brand-50 text-brand-800 hover:bg-brand-100 disabled:opacity-50',
@@ -41,7 +42,7 @@ export function Btn({ variant = 'primary', size = 'md', icon: Icon, loading, cla
       type="button"
       {...props}
       disabled={props.disabled || loading}
-      className={`inline-flex items-center justify-center font-medium rounded-lg transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
+      className={`inline-flex items-center justify-center font-medium rounded-xl transition active:scale-[.98] ${VARIANTS[variant]} ${SIZES[size]} ${className}`}
     >
       {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : Icon ? <Icon className="w-4 h-4 shrink-0" /> : null}
       {children}
@@ -129,7 +130,7 @@ export function Chip({ children, tone = 'slate', className = '' }) {
 
 export function Card({ children, className = '', ...props }) {
   return (
-    <div {...props} className={`bg-white rounded-xl border border-slate-200 ${className}`}>
+    <div {...props} className={`bg-white rounded-2xl shadow-soft ${className}`}>
       {children}
     </div>
   );
@@ -164,7 +165,7 @@ export function SearchBox({ value, onChange, placeholder, className = '' }) {
 
 export function Segmented({ value, onChange, options, className = '' }) {
   return (
-    <div className={`inline-flex bg-slate-200/60 rounded-full p-1 gap-0.5 ${className}`} role="tablist">
+    <div className={`inline-flex bg-white shadow-soft rounded-full p-1 gap-0.5 ${className}`} role="tablist">
       {options.map((o) => (
         <button
           key={o.value}
@@ -173,7 +174,7 @@ export function Segmented({ value, onChange, options, className = '' }) {
           aria-selected={value === o.value}
           onClick={() => onChange(o.value)}
           className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors flex-1 whitespace-nowrap ${
-            value === o.value ? 'bg-white text-ink shadow-card' : 'text-slate-500 hover:text-slate-800'
+            value === o.value ? 'bg-gradient-to-br from-brand-500 to-violet-600 text-white shadow-soft' : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           {o.label}

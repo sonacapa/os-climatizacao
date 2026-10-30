@@ -25,19 +25,20 @@ export default function JobsTab() {
   const n = lists.hoje.length;
 
   return (
-    <div className="space-y-4">
-      <div className="pt-1">
-        <h1 className="text-[1.65rem] leading-tight font-semibold text-ink">{greeting()}, {me.name.split(' ')[0]}</h1>
-        <p className="text-sm text-slate-600 mt-0.5">{n === 0 ? 'Nenhum chamado para hoje.' : n === 1 ? '1 chamado para hoje.' : `${n} chamados para hoje.`}</p>
+    <div>
+      <div className="hero text-white -mx-4 px-4 pt-3 pb-12 rounded-b-[28px]">
+        <h1 className="text-[1.65rem] leading-tight font-semibold">{greeting()}, {me.name.split(' ')[0]}</h1>
+        <p className="text-sm text-white/85 mt-0.5">{n === 0 ? 'Nenhum chamado para hoje.' : n === 1 ? '1 chamado para hoje.' : `${n} chamados para hoje.`}</p>
       </div>
-      <Segmented className="w-full" value={view} onChange={setView} options={[
+      <div className="space-y-4 -mt-8 relative">
+      <Segmented className="w-full shadow-soft" value={view} onChange={setView} options={[
         { value: 'hoje', label: 'Hoje', count: lists.hoje.length },
         { value: 'proximos', label: 'Próximos', count: lists.proximos.length },
         { value: 'feitos', label: 'Histórico' }
       ]} />
       {view === 'hoje' && n >= 2 && (
-        <button onClick={() => openModal('route', { osIds: lists.hoje.map((o) => o.id), onApply: setOrder })} className="w-full flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left">
-          <Route className="w-5 h-5 text-brand-600" /><span className="flex-1"><span className="block text-sm font-medium text-ink">Rota do dia</span><span className="block text-xs text-slate-500">Ver a melhor ordem para {n} visitas</span></span>
+        <button onClick={() => openModal('route', { osIds: lists.hoje.map((o) => o.id), onApply: setOrder })} className="w-full flex items-center gap-3 rounded-2xl bg-white shadow-soft px-4 py-3 text-left">
+          <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-white grid place-items-center shrink-0"><Route className="w-5 h-5" /></span><span className="flex-1"><span className="block text-sm font-medium text-ink">Rota do dia</span><span className="block text-xs text-slate-500">Ver a melhor ordem para {n} visitas</span></span>
         </button>
       )}
       {view === 'feitos' ? <History list={list} /> : list.length === 0 ? (
@@ -46,6 +47,7 @@ export default function JobsTab() {
       ) : (
         <div className="space-y-3">{list.map((o, i) => <JobCard key={o.id} os={o} hero={view === 'hoje' && i === 0} onOpen={() => setScreen({ osId: o.id })} />)}</div>
       )}
+      </div>
     </div>
   );
 }
@@ -66,21 +68,21 @@ function JobCard({ os, onOpen, hero = false }) {
   }[os.status];
 
   const dark = hero && !!main;
-  const sub = dark ? 'text-slate-300' : 'text-slate-600';
+  const sub = dark ? 'text-white/85' : 'text-slate-600';
   const iconBtn = dark ? 'border-white/25 text-white' : 'border-slate-300 text-slate-700';
 
   return (
-    <div className={`rounded-xl overflow-hidden ${dark ? 'bg-ink text-white' : 'bg-white border border-slate-200'}`}>
+    <div className={`rounded-2xl overflow-hidden shadow-soft ${dark ? 'bg-gradient-to-br from-heat-400 via-rose-500 to-fuchsia-600 text-white' : 'bg-white'}`}>
       <div role="button" tabIndex={0} onClick={onOpen} onKeyDown={(e) => e.key === 'Enter' && onOpen()} className="p-4 space-y-3 cursor-pointer">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className={`num font-semibold leading-none ${dark ? 'text-4xl' : 'text-2xl'} ${late ? (dark ? 'text-heat-400' : 'text-rose-600') : ''}`}>{fmtTime(os.scheduled_time) || '--:--'}</p>
-            <p className={`text-xs font-semibold mt-1.5 ${late ? (dark ? 'text-heat-400' : 'text-rose-600') : sub}`}>
+            <p className={`num font-semibold leading-none ${dark ? 'text-4xl' : 'text-2xl'} ${late ? (dark ? 'text-white' : 'text-rose-600') : ''}`}>{fmtTime(os.scheduled_time) || '--:--'}</p>
+            <p className={`text-xs font-semibold mt-1.5 ${late ? (dark ? 'text-white' : 'text-rose-600') : sub}`}>
               {closed ? fmtDate(os.scheduled_date) : relDay(os.scheduled_date)}{late ? ' · atrasado' : ''}
             </p>
           </div>
           {dark ? (
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-white/10 rounded-md px-2 py-1"><span className="w-1.5 h-1.5 rounded-full bg-heat-400" />{STATUS[os.status].label}</span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-white/25 rounded-full px-2.5 py-1"><span className="w-1.5 h-1.5 rounded-full bg-white" />{STATUS[os.status].label}</span>
           ) : <StatusBadge status={os.status} />}
         </div>
         <div>
@@ -92,7 +94,7 @@ function JobCard({ os, onOpen, hero = false }) {
       </div>
       {main ? (
         <div className="px-4 pb-4 flex gap-2">
-          <Btn variant={dark ? 'heat' : 'primary'} size="lg" className="flex-1" onClick={stop(main.fn)}>{main.label}</Btn>
+          <Btn variant={dark ? 'white' : 'primary'} size="lg" className="flex-1" onClick={stop(main.fn)}>{main.label}</Btn>
           {client?.address && <a href={mapsLink(client.address)} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} aria-label="Abrir rota" className={`inline-flex items-center justify-center w-14 rounded-lg border ${iconBtn}`}><Navigation className="w-5 h-5" /></a>}
           {client?.phone && <a href={`tel:${client.phone}`} onClick={(e) => e.stopPropagation()} aria-label="Ligar" className={`inline-flex items-center justify-center w-14 rounded-lg border ${iconBtn}`}><Phone className="w-5 h-5" /></a>}
         </div>
