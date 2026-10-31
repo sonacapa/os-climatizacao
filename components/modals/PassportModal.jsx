@@ -18,11 +18,11 @@ export default function PassportModal({ equipmentId }) {
       subtitle={`${eq.code} · ${client?.name || ''}`}
       onClose={closeModal}
       footer={
-        <div className="flex flex-wrap gap-2 justify-between">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:justify-between">
           <Btn variant="secondary" icon={QrCode} onClick={() => openModal('qrLabels', { equipment: eq })}>Etiqueta QR</Btn>
-          <div className="flex gap-2">
-            <a href={`/qr/${eq.qr_token}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 px-3 py-2.5 text-sm font-semibold rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50"><ExternalLink className="w-4 h-4" /> Visão do cliente</a>
-            <Btn icon={Pencil} onClick={() => openModal('equipment', { equipment: eq })}>Editar</Btn>
+          <div className="contents sm:flex sm:gap-2">
+            <a href={`/qr/${eq.qr_token}`} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 text-sm font-semibold rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50"><ExternalLink className="w-4 h-4" /> Visão do cliente</a>
+            <Btn icon={Pencil} className="col-span-2 sm:col-auto" onClick={() => openModal('equipment', { equipment: eq })}>Editar</Btn>
           </div>
         </div>
       }

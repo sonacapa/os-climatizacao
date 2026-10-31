@@ -17,21 +17,29 @@ export default function OsCard({ os, showDate }) {
       className="relative overflow-hidden w-full min-w-0 text-left bg-white rounded-xl border border-slate-200 shadow-sm hover:border-brand-300 transition-colors p-4 pl-5 flex gap-4"
     >
       <span className={`absolute left-0 inset-y-0 w-1.5 ${STATUS[os.status].dot}`} />
-      <div className="w-14 shrink-0 text-center pt-0.5">
+      <div className="hidden sm:block w-14 shrink-0 text-center pt-0.5">
         <p className="num text-xl font-semibold text-brand-700 leading-none">{fmtTime(os.scheduled_time) || '--:--'}</p>
         {showDate && <p className="text-[11px] font-semibold text-slate-500 mt-1 leading-tight">{showDate}</p>}
       </div>
-      <div className="min-w-0 flex-1 space-y-1.5 border-l border-slate-200 pl-4">
+      <div className="min-w-0 flex-1 space-y-1.5 sm:border-l sm:border-slate-200 sm:pl-4">
+        {/* celular: horário e situação em cima */}
+        <div className="sm:hidden flex items-center justify-between gap-2">
+          <p className="text-sm">
+            <span className="num text-lg font-semibold text-brand-700">{fmtTime(os.scheduled_time) || '--:--'}</span>
+            {showDate && <span className="text-xs font-semibold text-slate-500 ml-2">{showDate}</span>}
+          </p>
+          <StatusBadge status={os.status} />
+        </div>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="font-semibold text-ink leading-snug">{client?.name}</p>
             <p className="text-xs text-slate-500">{osLabel(os)} · {os.service_type}</p>
           </div>
-          <StatusBadge status={os.status} />
+          <span className="hidden sm:inline-flex shrink-0"><StatusBadge status={os.status} /></span>
         </div>
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-600">
           <span className="inline-flex items-center gap-1.5"><User className="w-4 h-4 text-slate-400" /> {tech?.name || <em className="text-heat-600 not-italic font-semibold">sem técnico</em>}</span>
-          {client?.address && <span className="inline-flex items-center gap-1.5 min-w-0"><MapPin className="w-4 h-4 text-slate-400 shrink-0" /> <span className="truncate max-w-[16rem]">{client.address}</span></span>}
+          {client?.address && <span className="inline-flex items-center gap-1.5 min-w-0"><MapPin className="w-4 h-4 text-slate-400 shrink-0" /> <span className="truncate max-w-[15rem] sm:max-w-[16rem]">{client.address}</span></span>}
         </div>
         <p className="text-xs text-slate-500">
           <strong className="text-slate-700">{os.items.length} {os.items.length === 1 ? 'aparelho' : 'aparelhos'}</strong>

@@ -48,7 +48,7 @@ function GroupCard({ g }) {
     '\n\nPodemos agendar uma visita para cuidar de todos de uma vez?';
 
   return (
-    <Card className="p-4 space-y-3">
+    <Card className="p-4 space-y-3 min-w-0">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="font-semibold text-slate-900 truncate">{client.name}</p>
@@ -77,10 +77,10 @@ function GroupCard({ g }) {
       )}
       {scheduled.length > 0 && <p className="text-xs text-emerald-700">{scheduled.length} aparelho(s) deste cliente já estão em uma O.S. aberta.</p>}
       <div className="flex gap-2">
-        <a href={waLink(client.phone, msg)} target="_blank" rel="noreferrer" className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#25D366] text-white text-sm font-semibold">
+        <a href={waLink(client.phone, msg)} target="_blank" rel="noreferrer" className="flex-1 min-w-0 inline-flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#25D366] text-white text-sm font-semibold">
           <MessageCircle className="w-4 h-4" /> Avisar cliente
         </a>
-        <Btn className="flex-1" icon={CalendarPlus} onClick={() => openModal('os', { preset: { client_id: client.id, equipment_ids: machines.map((m) => m.id), service_type: 'Manutenção preventiva' } })}>
+        <Btn className="flex-1 min-w-0" icon={CalendarPlus} onClick={() => openModal('os', { preset: { client_id: client.id, equipment_ids: machines.map((m) => m.id), service_type: 'Manutenção preventiva' } })}>
           Agendar visita
         </Btn>
       </div>

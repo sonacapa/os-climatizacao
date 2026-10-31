@@ -98,7 +98,7 @@ export default function AgendaView() {
             })}
           </div>
         </div>
-        <h3 className="text-sm font-medium text-slate-600 mt-5 mb-2 capitalize">{dayLabel(sel)}</h3>
+        <h3 className="text-sm font-medium text-slate-600 mt-5 mb-2 first-letter:uppercase">{dayLabel(sel)}</h3>
         <DayItems day={sel} />
       </>
     );
@@ -155,7 +155,7 @@ export default function AgendaView() {
           <button onClick={goToday} className="h-9 px-3.5 rounded-full border border-slate-300 bg-white text-sm">Hoje</button>
           <button aria-label="Próximo" onClick={() => step(1)} className="w-9 h-9 rounded-full border border-slate-300 bg-white grid place-items-center"><ChevronRight className="w-4 h-4" /></button>
         </div>
-        <p className="font-display text-lg font-semibold capitalize mr-auto">{mode === 'tecnico' ? dayLabel(cursor) : title}</p>
+        <p className="font-display text-lg font-semibold first-letter:uppercase mr-auto">{mode === 'tecnico' ? dayLabel(cursor) : title}</p>
         <select value={techId} onChange={(e) => setTechId(e.target.value)} className={pillCls} aria-label="Técnico">
           <option value="">Técnicos</option>
           {techs.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}

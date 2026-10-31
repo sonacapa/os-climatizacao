@@ -107,7 +107,23 @@ export default function PmocModal({ clientId }) {
               {rows.length === 0 ? (
                 <p className="text-xs text-slate-500 py-1.5">Nenhum serviço registrado em {year}.</p>
               ) : (
-                <table className="w-full text-xs mt-1">
+                <>
+                {/* celular: um cartão por serviço */}
+                <ul className="sm:hidden print:hidden mt-1 divide-y divide-slate-200">
+                  {rows.map(({ os, it, date }) => {
+                    const ok = it.checklist.filter((c) => c.status === 'ok').length;
+                    const att = it.checklist.filter((c) => c.status === 'attention').length;
+                    return (
+                      <li key={it.id} className="py-1.5 text-xs">
+                        <p className="flex justify-between gap-2"><strong>{fmtDate(date)}</strong><span className="text-slate-500">O.S. {String(os.number).padStart(4, '0')}</span></p>
+                        <p>{it.service_type || os.service_type} · {getTech(os.tech_id)?.name || '—'}</p>
+                        {it.checklist.length > 0 && <p className="text-slate-600">Checklist: {ok} conforme{att ? ` · ${att} atenção` : ''}</p>}
+                        {it.notes && <p className="text-slate-500">{it.notes}</p>}
+                      </li>
+                    );
+                  })}
+                </ul>
+                <table className="hidden sm:table print:table w-full text-xs mt-1">
                   <thead>
                     <tr className="text-left text-slate-500">
                       <th className="font-medium py-1 pr-2 w-20">Data</th>
@@ -133,6 +149,7 @@ export default function PmocModal({ clientId }) {
                     })}
                   </tbody>
                 </table>
+                </>
               )}
               <p className="text-[11px] text-slate-500 mt-0.5">Próxima manutenção prevista: {eq.next_maintenance ? fmtDate(eq.next_maintenance) : 'não programada'}</p>
             </section>

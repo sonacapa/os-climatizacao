@@ -66,9 +66,9 @@ export default function LaudoModal({ osId, itemId }) {
       printArea
       onClose={closeModal}
       footer={
-        <div className="flex flex-wrap gap-2 justify-end">
-          <Btn variant="secondary" icon={Copy} onClick={copy}>Copiar link</Btn>
-          <Btn variant="whatsapp" onClick={() => window.open(waLink(client.phone, laudoMessage(data.company, client, eq, item)), '_blank')}>Enviar por WhatsApp</Btn>
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:justify-end">
+          <Btn variant="whatsapp" className="col-span-2" onClick={() => window.open(waLink(client.phone, laudoMessage(data.company, client, eq, item)), '_blank')}>Enviar por WhatsApp</Btn>
+          <Btn variant="secondary" icon={Copy} onClick={copy} className="sm:order-first">Copiar link</Btn>
           <Btn icon={Printer} onClick={() => window.print()}>Imprimir / PDF</Btn>
         </div>
       }
