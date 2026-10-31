@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { Loader2, Search, Wind, X } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { signedUrl } from '@/lib/files';
 import { ITEM_STATUS, STATUS, logoUrl } from '@/lib/utils';
 import { blobGet } from '@/lib/offline';
 
@@ -213,7 +213,7 @@ export function StorageImage({ bucket, path, alt, className = '' }) {
         local = URL.createObjectURL(blob);
         setUrl(local);
       } else {
-        supabase.storage.from(bucket).createSignedUrl(path, 3600).then(({ data }) => alive && setUrl(data?.signedUrl || null)).catch(() => {});
+        signedUrl(bucket, path).then((u) => alive && setUrl(u)).catch(() => {});
       }
     });
     return () => {

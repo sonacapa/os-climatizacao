@@ -43,13 +43,22 @@ Deno.serve(async (req) => {
       os.tech_id ? db.from('profiles').select('name').eq('id', os.tech_id).maybeSingle() : Promise.resolve({ data: null })
     ]);
 
+    // Fotos e assinaturas ficam no Cloudflare R2: links de 1 hora assinados com o mesmo segredo do site
+    const base = (Deno.env.get('FILES_BASE_URL') || '').replace(/\/$/, '');
+    const secret = Deno.env.get('FILES_SIGNING_SECRET') || '';
+    const hmac = async (text: string) => {
+      const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+      const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(text)));
+      return btoa(String.fromCharCode(...sig)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    };
     const sign = async (bucket: string, path?: string | null) => {
       if (!path) return null;
-      const { data } = await db.storage.from(bucket).createSignedUrl(path, 3600);
-      return data?.signedUrl ?? null;
+      const key = `${bucket}/${path}`;
+      const exp = Math.floor(Date.now() / 1000) + 3600;
+      return `${base}/api/files/${key.split('/').map(encodeURIComponent).join('/')}?e=${exp}&s=${await hmac(`${key}|${exp}`)}`;
     };
     const signature = await sign('signatures', os.signature_path);
-    const logo = company?.logo_path ? db.storage.from('branding').getPublicUrl(company.logo_path).data.publicUrl : null;
+    const logo = company?.logo_path ? `${base}/api/files/branding/${encodeURIComponent(company.logo_path)}` : null;
 
     const laudos = [];
     for (const item of items) {

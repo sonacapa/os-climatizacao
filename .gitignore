@@ -1,7 +1,10 @@
-node_modules
-.next
-.env.local
-.env*.local
-.vercel
 *.log
 .DS_Store
+.dev.vars
+.env*.local
+.env.local
+.next
+.open-next
+.vercel
+.wrangler
+node_modules

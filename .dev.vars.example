@@ -1,0 +1,2 @@
+# Copie para .dev.vars para rodar localmente (não vai para o Git)
+FILES_SIGNING_SECRET=troque-por-um-segredo-longo
