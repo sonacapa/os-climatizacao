@@ -6,6 +6,7 @@ import { useApp } from '../AppContext';
 import { Btn, Field, Modal, inputCls } from '../ui';
 import InstallCard from '../InstallCard';
 import MySignature from '../MySignature';
+import PushSettings from '../PushSettings';
 
 export default function AccountModal() {
   const { me, run, closeModal, signOut, toast } = useApp();
@@ -43,6 +44,9 @@ export default function AccountModal() {
         <Field label="Telefone"><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputCls} /></Field>
         <Btn type="submit" loading={busy} className="w-full">Salvar dados</Btn>
       </form>
+      <div className="border-t border-slate-100 mt-5 pt-5">
+        <PushSettings />
+      </div>
       <div className="border-t border-slate-100 mt-5 pt-5">
         <MySignature />
       </div>

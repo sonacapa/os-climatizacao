@@ -26,7 +26,13 @@ const MAIN = TABS.slice(0, 4);
 
 export default function OfficeApp() {
   const { data, me, signOut, openModal, canSwitch } = useApp();
-  const [tab, setTab] = useState('inicio');
+  // ?aba=preventivas abre direto numa aba (usado pelas notificações)
+  const [tab, setTab] = useState(() => {
+    if (typeof window === 'undefined') return 'inicio';
+    const aba = new URLSearchParams(window.location.search).get('aba');
+    if (aba) window.history.replaceState(null, '', window.location.pathname);
+    return TABS.some((t) => t.id === aba) ? aba : 'inicio';
+  });
   const [more, setMore] = useState(false);
   const [ordersFilter, setOrdersFilter] = useState('abertas');
   const alerts = dueGroups(data, 30).length;

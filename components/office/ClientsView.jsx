@@ -1,6 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { ArrowLeft, ChevronRight, Wind, ClipboardList, History, MapPin, MessageCircle, Pencil, Phone, Plus, QrCode, UserPlus, Users } from 'lucide-react';
+import { ArrowLeft, ChevronRight, Wind, ClipboardList, FileText, History, MapPin, MessageCircle, Pencil, Phone, Plus, QrCode, UserPlus, Users } from 'lucide-react';
 import { api } from '@/lib/api';
 import { geocode } from '@/lib/geo';
 import { norm, waLink } from '@/lib/utils';
@@ -107,6 +107,7 @@ function ClientDetail({ client, onBack }) {
         </div>
         <div className="flex flex-wrap gap-2 pt-1">
           <Btn icon={ClipboardList} onClick={() => openModal('os', { preset: { client_id: client.id } })}>Nova O.S.</Btn>
+          {machines.length > 0 && <Btn variant="secondary" icon={FileText} onClick={() => openModal('pmoc', { clientId: client.id })}>Relatório PMOC</Btn>}
           {client.phone && <a href={waLink(client.phone, `Olá, ${client.name.split(' ')[0]}!`)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#25D366] text-white text-sm font-semibold"><MessageCircle className="w-4 h-4" /> WhatsApp</a>}
         </div>
       </Card>

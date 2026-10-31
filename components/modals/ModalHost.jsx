@@ -8,6 +8,7 @@ import MemberModal from './MemberModal';
 import OsDetailModal from './OsDetailModal';
 import OsFormModal from './OsFormModal';
 import PassportModal from './PassportModal';
+import PmocModal from './PmocModal';
 import RescheduleModal from './RescheduleModal';
 import QrLabelsModal from './QrLabelsModal';
 import ShareLaudosModal from './ShareLaudosModal';
@@ -24,6 +25,7 @@ const MAP = {
   osDetail: OsDetailModal,
   os: OsFormModal,
   passport: PassportModal,
+  pmoc: PmocModal,
   qrLabels: QrLabelsModal,
   reschedule: RescheduleModal,
   shareLaudos: ShareLaudosModal,
