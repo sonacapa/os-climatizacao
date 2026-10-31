@@ -128,7 +128,12 @@ export default function LaudoView({ d }) {
           <p className="text-slate-500">Cliente</p>
         </div>
         <div>
-          <div className="h-16 border-b border-slate-700" />
+          <div className="h-16 flex items-end justify-center border-b border-slate-700">
+            {photos.techSignature && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photos.techSignature} alt="Assinatura do técnico" className="max-h-16" />
+            )}
+          </div>
           <p className="mt-1 font-semibold">{company.technical_responsible || tech || '—'}</p>
           <p className="text-slate-500">Responsável técnico</p>
         </div>

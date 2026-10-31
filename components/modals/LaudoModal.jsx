@@ -16,17 +16,19 @@ export function useLaudoData(osId, itemId) {
   const { data, getClient, getEq, getTech } = useApp();
   const os = data.orders.find((o) => o.id === osId);
   const item = os?.items.find((i) => i.id === itemId);
-  const [photos, setPhotos] = useState({ before: null, after: null, signature: null });
+  const [photos, setPhotos] = useState({ before: null, after: null, signature: null, techSignature: null });
+  const techSigPath = getTech(os?.tech_id)?.signature_path;
   useEffect(() => {
     if (!os || !item) return undefined;
     let alive = true;
     Promise.all([
       api.createSignedUrl('os-photos', item.photo_before_path),
       api.createSignedUrl('os-photos', item.photo_after_path),
-      api.createSignedUrl('signatures', os.signature_path)
-    ]).then(([before, after, signature]) => alive && setPhotos({ before, after, signature }));
+      api.createSignedUrl('signatures', os.signature_path),
+      api.createSignedUrl('signatures', techSigPath)
+    ]).then(([before, after, signature, techSignature]) => alive && setPhotos({ before, after, signature, techSignature }));
     return () => { alive = false; };
-  }, [os?.id, item?.photo_before_path, item?.photo_after_path, os?.signature_path]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [os?.id, item?.photo_before_path, item?.photo_after_path, os?.signature_path, techSigPath]); // eslint-disable-line react-hooks/exhaustive-deps
   if (!os || !item) return { os, item, d: null };
   const client = getClient(os.client_id);
   const eq = getEq(item.equipment_id);

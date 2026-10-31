@@ -5,6 +5,7 @@ import { api } from '@/lib/api';
 import { useApp } from '../AppContext';
 import { Btn, Field, Modal, inputCls } from '../ui';
 import InstallCard from '../InstallCard';
+import MySignature from '../MySignature';
 
 export default function AccountModal() {
   const { me, run, closeModal, signOut, toast } = useApp();
@@ -42,6 +43,9 @@ export default function AccountModal() {
         <Field label="Telefone"><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputCls} /></Field>
         <Btn type="submit" loading={busy} className="w-full">Salvar dados</Btn>
       </form>
+      <div className="border-t border-slate-100 mt-5 pt-5">
+        <MySignature />
+      </div>
       <div className="border-t border-slate-100 mt-5 pt-5 space-y-3">
         <h4 className="font-semibold text-slate-900">Trocar senha</h4>
         <Field label="Nova senha"><input type="password" autoComplete="new-password" value={pw} onChange={(e) => setPw(e.target.value)} className={inputCls} /></Field>

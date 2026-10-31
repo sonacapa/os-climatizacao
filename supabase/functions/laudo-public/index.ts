@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
     const [{ data: company }, { data: client }, { data: tech }] = await Promise.all([
       db.from('company_settings').select('name,document,phone,email,address,technical_responsible,logo_path').eq('id', 1).single(),
       db.from('clients').select('name,address').eq('id', os.client_id).single(),
-      os.tech_id ? db.from('profiles').select('name').eq('id', os.tech_id).maybeSingle() : Promise.resolve({ data: null })
+      os.tech_id ? db.from('profiles').select('name,signature_path').eq('id', os.tech_id).maybeSingle() : Promise.resolve({ data: null })
     ]);
 
     // Fotos e assinaturas ficam no Cloudflare R2: links de 1 hora assinados com o mesmo segredo do site
@@ -58,6 +58,7 @@ Deno.serve(async (req) => {
       return `${base}/api/files/${key.split('/').map(encodeURIComponent).join('/')}?e=${exp}&s=${await hmac(`${key}|${exp}`)}`;
     };
     const signature = await sign('signatures', os.signature_path);
+    const techSignature = await sign('signatures', tech?.signature_path);
     const logo = company?.logo_path ? `${base}/api/files/branding/${encodeURIComponent(company.logo_path)}` : null;
 
     const laudos = [];
@@ -76,7 +77,8 @@ Deno.serve(async (req) => {
         photos: {
           before: await sign('os-photos', item.photo_before_path),
           after: await sign('os-photos', item.photo_after_path),
-          signature
+          signature,
+          techSignature
         }
       });
     }
