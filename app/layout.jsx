@@ -6,7 +6,7 @@ const display = Bricolage_Grotesque({ subsets: ['latin'], display: 'swap', varia
 const body = Figtree({ subsets: ['latin'], display: 'swap', variable: '--font-body' });
 
 export const metadata = {
-  title: 'Ordens de Serviço · Climatização',
+  title: 'ClimaOS · Ordens de serviço',
   description: 'Gestão de ordens de serviço, equipamentos e laudos de climatização.',
   appleWebApp: { capable: true, title: 'O.S. Clima', statusBarStyle: 'default' }
 };

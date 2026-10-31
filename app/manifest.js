@@ -1,8 +1,8 @@
 export default function manifest() {
   return {
     id: '/',
-    name: 'Ordens de Serviço',
-    short_name: 'O.S. Clima',
+    name: 'ClimaOS',
+    short_name: 'ClimaOS',
     description: 'Ordens de serviço, aparelhos e laudos de climatização.',
     lang: 'pt-BR',
     start_url: '/',
